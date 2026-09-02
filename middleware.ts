@@ -1,7 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createMiddlewareClient } from "@/lib/supabase/middleware";
 
-const PUBLIC_PATHS = ["/login", "/forgot-password", "/auth/callback", "/auth/error"];
+const PUBLIC_PATHS = [
+  "/login",
+  "/forgot-password",
+  "/auth/callback",
+  "/auth/complete",
+  "/auth/error",
+];
 // Reachable with a session but without an active profile (password setup).
 const SESSION_ONLY_PATHS = ["/reset-password", "/invite", "/account-inactive"];
 
