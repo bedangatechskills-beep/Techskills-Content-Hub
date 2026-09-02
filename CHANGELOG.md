@@ -1,5 +1,19 @@
 # Changelog
 
+## Phase 2 — Script Gate (2026-09-02)
+
+The first real quality gate: scripts are versioned in the app, an AI evaluation scores each version and raises hard compliance flags, the approver pins a specific version, and any material change afterwards is detected and forces re-approval.
+
+- Migrations `0002_script_gate.sql` and `0003_rpc_only_transitions.sql`: `script_versions` (append-only, draft/submitted/approved/superseded/changes_requested), `script_approvals` (immutable), `ai_evaluations` (provider, model, prompt_version, input_hash, scores, recommendations, hard_flags, verdict, requester), `ai_flag_resolutions`, `app_settings` (`require_ai_before_submit`, `script_reapproval_required`); FKs from `content_records` to current/approved versions; `v_script_approval_queue`; Kanban view gains latest AI score; gate transitions marked `rpc_only` so a plain Kanban move cannot skip the AI requirement.
+- RPCs: `create_script_version`, `mark_version_material` (material → old approval superseded, pointer cleared, record back to Script Approval, approvers notified), `submit_script_for_approval` (requires an AI check when configured), `approve_script`, `request_script_changes`, `resolve_ai_flag` (dismiss needs a reason), `verify_nepali` (needs the `can_verify_nepali` flag), service-only `record_ai_evaluation` (writes evaluation + activity + notifications, sets Nepali verification pending; never moves a stage).
+- AI layer in `lib/ai/` shared by Next and Deno: Zod schemas (9 categories, 10 hard-flag keys, ≤3 recommendations), prompt `script.v1`, provider interface with `mock` (deterministic rules) and `anthropic` (structured outputs, `claude-opus-5`) adapters, SHA-256 input hash for idempotency. Edge Function `evaluate-script` checks the caller via RPC, assembles record + reference data, calls the provider, stores through `record_ai_evaluation`.
+- Screens: Script tab (editor → new version, current vs approved pills, SCRIPT CHANGED AFTER APPROVAL banner with material/non-material prompt, AI check card with flags → resolve/dismiss, category bars, recommendations; submit; approver actions; versions with word diff; approvals history; Nepali verification), `/approvals/scripts` queue and detail, AI score badge on Kanban cards.
+- Tests: pgTAP 44 new assertions (122 total), Vitest 36 (golden cases: typo, guaranteed job, retired handle, Nepali on AU vs NP, proper nouns, Active IT framing, missing CTA; hashing; provider selection), Playwright demo path (V1 flagged → V2 clean → submit → approve → V3 material → re-approval → activity).
+- Decisions S19–S21 recorded. Hosted: migrations pushed, `evaluate-script` deployed with `AI_PROVIDER=mock`.
+
+To switch on the real model: `supabase secrets set AI_PROVIDER=anthropic ANTHROPIC_API_KEY=sk-ant-…` (optional `ANTHROPIC_MODEL`). Golden cases against the real provider are a manual check after that.
+
+
 ## Phase 1 — Content Record and Workflow Engine (2026-09-02)
 
 One master Content Record with a permanent ID, moved through 16 stages under database-enforced permission rules, with every move in the Activity tab and on a Kanban board.

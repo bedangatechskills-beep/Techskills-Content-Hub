@@ -49,6 +49,17 @@ insert into ids select 'diff1', id from public.differentiators where key = 'real
 -- ---------------------------------------------------------------------------
 -- 1. Create + Content ID
 -- ---------------------------------------------------------------------------
+-- Expected sequence numbers are relative to whatever already exists this month,
+-- so the test also passes on a database that has been used.
+create temp table seq_before as
+  select r.code as region_code, coalesce(s.last_seq, 0) as last_seq
+  from public.regions r
+  left join public.content_id_sequences s on s.region_code = r.code and s.yymm = to_char(now() at time zone r.timezone, 'YYMM');
+grant select on seq_before to authenticated;
+create or replace function pg_temp.expected_id(p_region text, p_offset int) returns text language sql as $$
+  select format('TS-%s-%s-%s', p_region, to_char(now() at time zone (select timezone from public.regions where code = p_region), 'YYMM'),
+                lpad(((select last_seq from seq_before where region_code = p_region) + p_offset)::text, 3, '0'));
+$$;
 select pg_temp.login('siris');
 create temp table rec1 as
   select * from public.create_content_record(jsonb_build_object(
@@ -60,7 +71,7 @@ create temp table rec1 as
     'priority', 'high'));
 grant select on rec1 to authenticated;
 
-select matches((select content_id from rec1), '^TS-NP-[0-9]{4}-001$', 'first NP id of the month ends in 001');
+select is((select content_id from rec1), pg_temp.expected_id('NP', 1), 'NP id uses region, month and the next sequence number');
 select is((select status_key from rec1), 'requested', 'new record starts in Requested');
 select is((select priority::text from rec1), 'high', 'priority saved');
 select is((select dm_owner_id from rec1), (select pid from fx where label = 'siris'), 'DM team creator becomes DM owner');
@@ -74,8 +85,8 @@ create temp table rec2 as
 create temp table rec3 as
   select * from public.create_content_record(jsonb_build_object('title', 'First AU', 'region_code', 'AU', 'content_type_id', (select v from ids where k = 'reel')));
 grant select on rec2, rec3 to authenticated;
-select matches((select content_id from rec2), '-002$', 'sequence increments within region and month');
-select matches((select content_id from rec3), '^TS-AU-[0-9]{4}-001$', 'AU sequence is independent of NP');
+select is((select content_id from rec2), pg_temp.expected_id('NP', 2), 'sequence increments within region and month');
+select is((select content_id from rec3), pg_temp.expected_id('AU', 1), 'AU sequence is independent of NP');
 
 select throws_ok(
   $$ select public.create_content_record(jsonb_build_object('title', 'No type', 'region_code', 'NP')) $$,
@@ -107,8 +118,8 @@ select pg_temp.logout();
 select pg_temp.login('siris');
 select lives_ok($$ select public.move_stage((select id from rec1), 'idea_concept') $$, 'DM moves Requested → Concept');
 select lives_ok($$ select public.move_stage((select id from rec1), 'script_copy') $$, 'DM moves Concept → Script');
-select is((select count(*) from public.available_transitions((select id from rec1)) where to_status = 'script_approval'), 1::bigint,
-          'available_transitions offers Submit for approval to the DM');
+select is((select count(*) from public.available_transitions((select id from rec1)) where to_status = 'script_approval'), 0::bigint,
+          'Submit for approval is not a generic move; it goes through submit_script_for_approval (Phase 2)');
 select throws_ok(
   $$ select public.move_stage((select id from rec1), 'idea_concept') $$,
   '23514', null, 'backward move without a reason is rejected');

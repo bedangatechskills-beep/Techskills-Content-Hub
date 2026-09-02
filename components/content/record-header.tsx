@@ -1,4 +1,5 @@
-import { CalendarClock, Folder, FolderX, MapPin } from "lucide-react";
+import type { ReactNode } from "react";
+import { CalendarClock, Folder, FolderX, Languages, MapPin } from "lucide-react";
 import type { ContentDetail, ReferenceData } from "@/lib/content/queries";
 import { formatDate, timeAgo } from "@/lib/workflow/statuses";
 import { Badge } from "@/components/ui/badge";
@@ -10,9 +11,12 @@ import { StageActions } from "./stage-actions";
 export function RecordHeader({
   detail,
   refData,
+  banner,
 }: {
   detail: ContentDetail;
   refData: ReferenceData;
+  /** e.g. SCRIPT CHANGED AFTER APPROVAL */
+  banner?: ReactNode;
 }) {
   const { record, card, status } = detail;
   const campus = refData.campuses.find((c) => c.id === record.campus_id)?.name;
@@ -25,6 +29,7 @@ export function RecordHeader({
 
   return (
     <header className="space-y-4">
+      {banner}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 space-y-1">
           <p className="text-muted-foreground font-mono text-xs">{record.content_id}</p>
@@ -42,6 +47,21 @@ export function RecordHeader({
                 className="border-amber-500/50 text-amber-700 dark:text-amber-400"
               >
                 Potentially stalled
+              </Badge>
+            ) : null}
+            {record.nepali_verification === "pending" ? (
+              <Badge
+                variant="outline"
+                className="border-amber-500/50 text-amber-700 dark:text-amber-400"
+              >
+                <Languages className="size-3" aria-hidden /> Nepali verification pending
+              </Badge>
+            ) : record.nepali_verification === "verified" ? (
+              <Badge
+                variant="outline"
+                className="border-emerald-500/50 text-emerald-700 dark:text-emerald-400"
+              >
+                <Languages className="size-3" aria-hidden /> Nepali verified
               </Badge>
             ) : null}
           </div>

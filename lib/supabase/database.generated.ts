@@ -96,6 +96,177 @@ export type Database = {
             referencedRelation: "v_kanban_cards"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "activity_log_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+        ]
+      }
+      ai_evaluations: {
+        Row: {
+          category_scores: Json
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          duration_ms: number | null
+          evaluation_type: Database["public"]["Enums"]["ai_evaluation_type"]
+          hard_flags: Json
+          id: string
+          input_hash: string
+          model: string
+          overall_score: number | null
+          prompt_version: string
+          provider: string
+          raw_response: Json | null
+          recommendations: Json
+          requested_by: string | null
+          script_version_id: string | null
+          summary: string | null
+          verdict: string | null
+        }
+        Insert: {
+          category_scores?: Json
+          content_id: string
+          created_at?: string
+          creative_version_id?: string | null
+          duration_ms?: number | null
+          evaluation_type: Database["public"]["Enums"]["ai_evaluation_type"]
+          hard_flags?: Json
+          id?: string
+          input_hash: string
+          model: string
+          overall_score?: number | null
+          prompt_version: string
+          provider: string
+          raw_response?: Json | null
+          recommendations?: Json
+          requested_by?: string | null
+          script_version_id?: string | null
+          summary?: string | null
+          verdict?: string | null
+        }
+        Update: {
+          category_scores?: Json
+          content_id?: string
+          created_at?: string
+          creative_version_id?: string | null
+          duration_ms?: number | null
+          evaluation_type?: Database["public"]["Enums"]["ai_evaluation_type"]
+          hard_flags?: Json
+          id?: string
+          input_hash?: string
+          model?: string
+          overall_score?: number | null
+          prompt_version?: string
+          provider?: string
+          raw_response?: Json | null
+          recommendations?: Json
+          requested_by?: string | null
+          script_version_id?: string | null
+          summary?: string | null
+          verdict?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_script_version_id_fkey"
+            columns: ["script_version_id"]
+            isOneToOne: false
+            referencedRelation: "script_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_script_version_id_fkey"
+            columns: ["script_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["version_id"]
+          },
+        ]
+      }
+      ai_flag_resolutions: {
+        Row: {
+          action: Database["public"]["Enums"]["flag_action"]
+          actor_id: string
+          created_at: string
+          evaluation_id: string
+          flag_index: number
+          flag_key: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["flag_action"]
+          actor_id: string
+          created_at?: string
+          evaluation_id: string
+          flag_index: number
+          flag_key: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["flag_action"]
+          actor_id?: string
+          created_at?: string
+          evaluation_id?: string
+          flag_index?: number
+          flag_key?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_flag_resolutions_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_flag_resolutions_evaluation_id_fkey"
+            columns: ["evaluation_id"]
+            isOneToOne: false
+            referencedRelation: "ai_evaluations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_flag_resolutions_evaluation_id_fkey"
+            columns: ["evaluation_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["evaluation_id"]
+          },
         ]
       }
       allowed_transitions: {
@@ -106,6 +277,7 @@ export type Database = {
           label: string | null
           permission_key: string
           reason_required: boolean
+          rpc_only: boolean
           to_status: string
         }
         Insert: {
@@ -115,6 +287,7 @@ export type Database = {
           label?: string | null
           permission_key: string
           reason_required?: boolean
+          rpc_only?: boolean
           to_status: string
         }
         Update: {
@@ -124,6 +297,7 @@ export type Database = {
           label?: string | null
           permission_key?: string
           reason_required?: boolean
+          rpc_only?: boolean
           to_status?: string
         }
         Relationships: [
@@ -147,6 +321,38 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "workflow_statuses"
             referencedColumns: ["key"]
+          },
+        ]
+      }
+      app_settings: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value: Json
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_settings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -327,6 +533,13 @@ export type Database = {
             referencedRelation: "v_kanban_cards"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "comments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
         ]
       }
       content_differentiators: {
@@ -356,6 +569,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_kanban_cards"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_differentiators_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
           },
           {
             foreignKeyName: "content_differentiators_differentiator_id_fkey"
@@ -446,6 +666,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_kanban_cards"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_platforms_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
           },
           {
             foreignKeyName: "content_platforms_platform_id_fkey"
@@ -597,6 +824,20 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "content_records_approved_script_fkey"
+            columns: ["approved_script_version_id"]
+            isOneToOne: false
+            referencedRelation: "script_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_approved_script_fkey"
+            columns: ["approved_script_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["version_id"]
+          },
+          {
             foreignKeyName: "content_records_campaign_id_fkey"
             columns: ["campaign_id"]
             isOneToOne: false
@@ -623,6 +864,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_current_script_fkey"
+            columns: ["current_script_version_id"]
+            isOneToOne: false
+            referencedRelation: "script_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_current_script_fkey"
+            columns: ["current_script_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["version_id"]
           },
           {
             foreignKeyName: "content_records_dm_owner_id_fkey"
@@ -809,6 +1064,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_kanban_cards"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
           },
           {
             foreignKeyName: "notifications_recipient_id_fkey"
@@ -1117,6 +1379,150 @@ export type Database = {
         }
         Relationships: []
       }
+      script_approvals: {
+        Row: {
+          approver_id: string
+          content_id: string
+          created_at: string
+          decision: Database["public"]["Enums"]["approval_decision"]
+          id: string
+          reason: string | null
+          script_version_id: string
+        }
+        Insert: {
+          approver_id: string
+          content_id: string
+          created_at?: string
+          decision: Database["public"]["Enums"]["approval_decision"]
+          id?: string
+          reason?: string | null
+          script_version_id: string
+        }
+        Update: {
+          approver_id?: string
+          content_id?: string
+          created_at?: string
+          decision?: Database["public"]["Enums"]["approval_decision"]
+          id?: string
+          reason?: string | null
+          script_version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "script_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "script_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "script_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "script_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "script_approvals_script_version_id_fkey"
+            columns: ["script_version_id"]
+            isOneToOne: false
+            referencedRelation: "script_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "script_approvals_script_version_id_fkey"
+            columns: ["script_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["version_id"]
+          },
+        ]
+      }
+      script_versions: {
+        Row: {
+          approval_status: Database["public"]["Enums"]["script_approval_status"]
+          body: string
+          change_summary: string | null
+          content_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_material_change: boolean | null
+          material_reason: string | null
+          script_shape: Database["public"]["Enums"]["script_shape"]
+          version_no: number
+        }
+        Insert: {
+          approval_status?: Database["public"]["Enums"]["script_approval_status"]
+          body: string
+          change_summary?: string | null
+          content_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_material_change?: boolean | null
+          material_reason?: string | null
+          script_shape?: Database["public"]["Enums"]["script_shape"]
+          version_no: number
+        }
+        Update: {
+          approval_status?: Database["public"]["Enums"]["script_approval_status"]
+          body?: string
+          change_summary?: string | null
+          content_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_material_change?: boolean | null
+          material_reason?: string | null
+          script_shape?: Database["public"]["Enums"]["script_shape"]
+          version_no?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "script_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "script_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "script_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "script_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stage_history: {
         Row: {
           content_id: string
@@ -1162,6 +1568,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_kanban_cards"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stage_history_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
           },
           {
             foreignKeyName: "stage_history_entered_by_fkey"
@@ -1298,6 +1711,9 @@ export type Database = {
     Views: {
       v_kanban_cards: {
         Row: {
+          ai_flag_count: number | null
+          ai_score: number | null
+          ai_verdict: string | null
           assignee_name: string | null
           campaign_id: string | null
           campus_id: string | null
@@ -1396,6 +1812,77 @@ export type Database = {
           },
         ]
       }
+      v_script_ai_latest: {
+        Row: {
+          content_id: string | null
+          created_at: string | null
+          flag_count: number | null
+          overall_score: number | null
+          verdict: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+        ]
+      }
+      v_script_approval_queue: {
+        Row: {
+          change_summary: string | null
+          content_code: string | null
+          content_id: string | null
+          content_type: string | null
+          dm_owner_id: string | null
+          dm_owner_name: string | null
+          evaluation_id: string | null
+          flag_count: number | null
+          is_reapproval: boolean | null
+          overall_score: number | null
+          priority: Database["public"]["Enums"]["content_priority"] | null
+          region_code: string | null
+          title: string | null
+          verdict: string | null
+          version_author: string | null
+          version_created_at: string | null
+          version_id: string | null
+          version_no: number | null
+          waiting_since: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_region_code_fkey"
+            columns: ["region_code"]
+            isOneToOne: false
+            referencedRelation: "regions"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       v_stage_durations: {
         Row: {
           content_code: string | null
@@ -1425,6 +1912,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_kanban_cards"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stage_history_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
           },
           {
             foreignKeyName: "stage_history_entered_by_fkey"
@@ -1675,6 +2169,61 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      approve_script: {
+        Args: { p_version_id: string }
+        Returns: {
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       assert_admin: { Args: never; Returns: undefined }
       auth_profile: {
         Args: never
@@ -1715,6 +2264,10 @@ export type Database = {
           to_name: string
           to_status: string
         }[]
+      }
+      can_run_script_evaluation: {
+        Args: { p_version_id: string }
+        Returns: boolean
       }
       create_content_record: {
         Args: { p: Json }
@@ -1771,6 +2324,32 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_script_version: {
+        Args: {
+          p_body: string
+          p_change_summary?: string
+          p_content_id: string
+        }
+        Returns: {
+          approval_status: Database["public"]["Enums"]["script_approval_status"]
+          body: string
+          change_summary: string | null
+          content_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_material_change: boolean | null
+          material_reason: string | null
+          script_shape: Database["public"]["Enums"]["script_shape"]
+          version_no: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "script_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       disable_user: {
         Args: { p_profile_id: string }
         Returns: {
@@ -1823,9 +2402,94 @@ export type Database = {
       final_approvers: { Args: never; Returns: string[] }
       has_permission: { Args: { p_key: string }; Returns: boolean }
       in_team: { Args: { p_team_key: string }; Returns: boolean }
+      internal_move_stage: {
+        Args: { p_content_id: string; p_reason?: string; p_to_status: string }
+        Returns: {
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       is_active_user: { Args: never; Returns: boolean }
       is_final_approver: { Args: never; Returns: boolean }
       is_super_admin: { Args: never; Returns: boolean }
+      latest_script_evaluation: {
+        Args: { p_version_id: string }
+        Returns: {
+          category_scores: Json
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          duration_ms: number | null
+          evaluation_type: Database["public"]["Enums"]["ai_evaluation_type"]
+          hard_flags: Json
+          id: string
+          input_hash: string
+          model: string
+          overall_score: number | null
+          prompt_version: string
+          provider: string
+          raw_response: Json | null
+          recommendations: Json
+          requested_by: string | null
+          script_version_id: string | null
+          summary: string | null
+          verdict: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "ai_evaluations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       log_activity: {
         Args: {
           p_content_id: string
@@ -1839,6 +2503,32 @@ export type Database = {
         Returns: string
       }
       mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number }
+      mark_version_material: {
+        Args: {
+          p_is_material: boolean
+          p_reason?: string
+          p_version_id: string
+        }
+        Returns: {
+          approval_status: Database["public"]["Enums"]["script_approval_status"]
+          body: string
+          change_summary: string | null
+          content_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_material_change: boolean | null
+          material_reason: string | null
+          script_shape: Database["public"]["Enums"]["script_shape"]
+          version_no: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "script_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       move_stage: {
         Args: { p_content_id: string; p_reason?: string; p_to_status: string }
         Returns: {
@@ -1943,6 +2633,115 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      record_ai_evaluation: {
+        Args: { p: Json }
+        Returns: {
+          category_scores: Json
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          duration_ms: number | null
+          evaluation_type: Database["public"]["Enums"]["ai_evaluation_type"]
+          hard_flags: Json
+          id: string
+          input_hash: string
+          model: string
+          overall_score: number | null
+          prompt_version: string
+          provider: string
+          raw_response: Json | null
+          recommendations: Json
+          requested_by: string | null
+          script_version_id: string | null
+          summary: string | null
+          verdict: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "ai_evaluations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      request_script_changes: {
+        Args: { p_reason: string; p_version_id: string }
+        Returns: {
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      resolve_ai_flag: {
+        Args: {
+          p_action: Database["public"]["Enums"]["flag_action"]
+          p_evaluation_id: string
+          p_flag_index: number
+          p_reason?: string
+        }
+        Returns: {
+          action: Database["public"]["Enums"]["flag_action"]
+          actor_id: string
+          created_at: string
+          evaluation_id: string
+          flag_index: number
+          flag_key: string
+          id: string
+          reason: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "ai_flag_resolutions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       resolve_comment: {
         Args: { p_comment_id: string; p_resolved?: boolean }
         Returns: {
@@ -1959,6 +2758,65 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "comments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      setting_bool: {
+        Args: { p_default?: boolean; p_key: string }
+        Returns: boolean
+      }
+      submit_script_for_approval: {
+        Args: { p_version_id: string }
+        Returns: {
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -2053,6 +2911,61 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      verify_nepali: {
+        Args: { p_content_id: string; p_note?: string }
+        Returns: {
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       working_days_between: {
         Args: { p_from: string; p_to: string }
         Returns: number
@@ -2064,6 +2977,8 @@ export type Database = {
         | "invitation_pending"
         | "disabled"
         | "archived_demo"
+      ai_evaluation_type: "script" | "creative"
+      approval_decision: "approved" | "changes_requested"
       comment_section:
         | "concept"
         | "script"
@@ -2080,7 +2995,14 @@ export type Database = {
         | "story"
         | "one_off"
       content_priority: "low" | "normal" | "high" | "urgent"
+      flag_action: "resolved" | "dismissed"
       nepali_verification: "not_needed" | "pending" | "verified"
+      script_approval_status:
+        | "draft"
+        | "submitted"
+        | "approved"
+        | "superseded"
+        | "changes_requested"
       script_shape: "spoken" | "copy_spec" | "caption" | "shot_list" | "none"
       work_status:
         | "available"
@@ -2230,6 +3152,8 @@ export const Constants = {
         "disabled",
         "archived_demo",
       ],
+      ai_evaluation_type: ["script", "creative"],
+      approval_decision: ["approved", "changes_requested"],
       comment_section: [
         "concept",
         "script",
@@ -2248,7 +3172,15 @@ export const Constants = {
         "one_off",
       ],
       content_priority: ["low", "normal", "high", "urgent"],
+      flag_action: ["resolved", "dismissed"],
       nepali_verification: ["not_needed", "pending", "verified"],
+      script_approval_status: [
+        "draft",
+        "submitted",
+        "approved",
+        "superseded",
+        "changes_requested",
+      ],
       script_shape: ["spoken", "copy_spec", "caption", "shot_list", "none"],
       work_status: [
         "available",

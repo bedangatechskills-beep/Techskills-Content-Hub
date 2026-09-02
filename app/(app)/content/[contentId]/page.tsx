@@ -22,6 +22,9 @@ import { StageHistoryCard } from "@/components/content/stage-history-card";
 import { PlaceholderTab } from "@/components/content/placeholder-tab";
 import { CommentsTab } from "@/components/content/comments-tab";
 import { ActivityTab } from "@/components/content/activity-tab";
+import { getScriptTab } from "@/lib/script/queries";
+import { ScriptTab } from "@/components/content/script/script-tab";
+import { ScriptChangedBanner } from "@/components/content/script/script-banner";
 
 export async function generateMetadata({ params }: { params: Promise<{ contentId: string }> }) {
   const { contentId } = await params;
@@ -41,12 +44,26 @@ export default async function ContentRecordPage({
   if (!detail) notFound();
 
   const active = isTabKey(tab) ? tab : "overview";
-  const [refData, comments, activity, history] = await Promise.all([
+  const [refData, comments, activity, history, script] = await Promise.all([
     getReferenceData(),
     getComments(detail.record.id),
     active === "activity" ? getActivity(detail.record.id) : Promise.resolve([]),
     active === "overview" ? getStageHistory(detail.record.id) : Promise.resolve([]),
+    getScriptTab(
+      detail.record.id,
+      detail.record.current_script_version_id,
+      detail.record.approved_script_version_id,
+    ),
   ]);
+
+  const banner =
+    script.changedAfterApproval && script.current && script.approved ? (
+      <ScriptChangedBanner
+        currentNo={script.current.version_no}
+        approvedNo={script.approved.version_no}
+        isMaterial={script.current.is_material_change}
+      />
+    ) : null;
 
   const perms = {
     canEditConcept: can(access, "content.edit_concept"),
@@ -62,12 +79,12 @@ export default async function ContentRecordPage({
         <ArrowLeft className="size-3.5" /> All content
       </Link>
 
-      <RecordHeader detail={detail} refData={refData} />
+      <RecordHeader detail={detail} refData={refData} banner={banner} />
 
       <RecordTabs
         code={detail.record.content_id}
         active={active}
-        counts={{ comments: comments.length }}
+        counts={{ comments: comments.length, script: script.versions.length }}
       />
 
       {active === "overview" ? (
@@ -84,13 +101,7 @@ export default async function ContentRecordPage({
         </div>
       ) : null}
 
-      {active === "script" ? (
-        <PlaceholderTab
-          title="Script / copy"
-          phase="Phase 2"
-          body="Versioned scripts and copy specs, the AI script score with hard flags, and script approval."
-        />
-      ) : null}
+      {active === "script" ? <ScriptTab detail={detail} data={script} access={access} /> : null}
       {active === "production" ? (
         <PlaceholderTab
           title="Production"

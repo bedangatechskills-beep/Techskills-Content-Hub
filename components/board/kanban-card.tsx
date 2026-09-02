@@ -113,6 +113,21 @@ export const KanbanCard = forwardRef<HTMLDivElement, KanbanCardProps>(function K
             {scriptStatus}
           </span>
         ) : null}
+        {card.ai_score != null ? (
+          <span
+            className={cn(
+              "inline-flex items-center gap-1 rounded px-1 font-medium",
+              card.ai_verdict === "significant_issues"
+                ? "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200"
+                : card.ai_verdict === "minor_issues"
+                  ? "bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-200"
+                  : "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200",
+            )}
+            title={`AI script score ${card.ai_score}/10 · ${card.ai_flag_count ?? 0} hard flags`}
+          >
+            AI {card.ai_score}/10{card.ai_flag_count ? ` · ${card.ai_flag_count} flags` : ""}
+          </span>
+        ) : null}
       </div>
 
       {card.is_stalled ? (

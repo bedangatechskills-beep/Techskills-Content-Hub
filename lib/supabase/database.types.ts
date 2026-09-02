@@ -41,3 +41,15 @@ export type ReferenceHandleRow = Tables<"reference_handles">;
 export type BrandFactRow = Tables<"brand_facts">;
 export type KanbanCardRow = Database["public"]["Views"]["v_kanban_cards"]["Row"];
 export type StageDurationRow = Database["public"]["Views"]["v_stage_durations"]["Row"];
+
+// Phase 2
+export type ScriptApprovalStatus = Enums<"script_approval_status">;
+export type ApprovalDecision = Enums<"approval_decision">;
+export type FlagAction = Enums<"flag_action">;
+export type ScriptVersionRow = Tables<"script_versions">;
+export type ScriptApprovalRow = Tables<"script_approvals">;
+export type AiEvaluationRow = Tables<"ai_evaluations">;
+export type AiFlagResolutionRow = Tables<"ai_flag_resolutions">;
+export type AppSettingRow = Tables<"app_settings">;
+export type ScriptApprovalQueueRow = Database["public"]["Views"]["v_script_approval_queue"]["Row"];
+export type ScriptAiLatestRow = Database["public"]["Views"]["v_script_ai_latest"]["Row"];
