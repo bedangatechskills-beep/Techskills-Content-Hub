@@ -34,7 +34,21 @@ describe("statusStyle", () => {
     expect(statusStyle(null)).toBe(STATUS_STYLES.grey);
   });
   it("maps every documented colour", () => {
-    for (const k of ["grey", "blue", "lavender", "cyan", "brand_blue", "amber", "orange", "indigo", "purple", "green", "teal", "dark_green", "slate"]) {
+    for (const k of [
+      "grey",
+      "blue",
+      "lavender",
+      "cyan",
+      "brand_blue",
+      "amber",
+      "orange",
+      "indigo",
+      "purple",
+      "green",
+      "teal",
+      "dark_green",
+      "slate",
+    ]) {
       expect(statusStyle(k).pill.length).toBeGreaterThan(0);
     }
   });

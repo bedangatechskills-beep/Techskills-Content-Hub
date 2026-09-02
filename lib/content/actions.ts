@@ -10,8 +10,17 @@ import type { CommentSection, ContentRecordRow, Json } from "@/lib/supabase/data
 
 const uuid = z.string().uuid();
 const optionalUuid = z.preprocess((v) => (v === "" || v == null ? undefined : v), uuid.optional());
-const optionalText = z.preprocess((v) => (typeof v === "string" && v.trim() === "" ? undefined : v), z.string().trim().optional());
-const optionalDate = z.preprocess((v) => (v === "" || v == null ? undefined : v), z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional());
+const optionalText = z.preprocess(
+  (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+  z.string().trim().optional(),
+);
+const optionalDate = z.preprocess(
+  (v) => (v === "" || v == null ? undefined : v),
+  z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+);
 
 function all(fd: FormData, key: string): string[] {
   return fd.getAll(key).map(String).filter(Boolean);
@@ -19,7 +28,11 @@ function all(fd: FormData, key: string): string[] {
 
 /** Friendly wording for the database's error codes. */
 function friendly(message: string, code?: string): string {
-  if (code === "42501") return message.replace(/^.*permission required$/, "You do not have permission for this action.");
+  if (code === "42501")
+    return message.replace(
+      /^.*permission required$/,
+      "You do not have permission for this action.",
+    );
   return message;
 }
 
@@ -35,7 +48,9 @@ const createSchema = z.object({
   campaign_id: optionalUuid,
   region_code: z.enum(["AU", "NP"], { message: "Choose a region" }),
   campus_id: optionalUuid,
-  content_type_id: uuid.or(z.literal("")).refine((v) => v !== "", { message: "Choose a content type (One-off if nothing fits)" }),
+  content_type_id: uuid
+    .or(z.literal(""))
+    .refine((v) => v !== "", { message: "Choose a content type (One-off if nothing fits)" }),
   objective_id: optionalUuid,
   secondary_objective_id: optionalUuid,
   pillar_id: optionalUuid,
@@ -82,7 +97,11 @@ export async function createContent(_prev: ActionState, formData: FormData): Pro
 // ---------------------------------------------------------------------------
 // Stage moves — the database decides; the UI just asks.
 // ---------------------------------------------------------------------------
-export async function moveStage(contentId: string, toStatus: string, reason?: string): Promise<ActionState & { record?: ContentRecordRow }> {
+export async function moveStage(
+  contentId: string,
+  toStatus: string,
+  reason?: string,
+): Promise<ActionState & { record?: ContentRecordRow }> {
   await requireActiveUser();
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("move_stage", {
@@ -102,12 +121,19 @@ export async function moveStage(contentId: string, toStatus: string, reason?: st
 // ---------------------------------------------------------------------------
 const patchSchema = z.record(z.string(), z.unknown());
 
-export async function updateContent(contentId: string, contentCode: string, patch: Record<string, unknown>): Promise<ActionState> {
+export async function updateContent(
+  contentId: string,
+  contentCode: string,
+  patch: Record<string, unknown>,
+): Promise<ActionState> {
   await requireActiveUser();
   const parsed = patchSchema.safeParse(patch);
   if (!parsed.success) return { error: "Invalid input" };
   const supabase = await createClient();
-  const { error } = await supabase.rpc("update_content_fields", { p_content_id: contentId, p: parsed.data as Json });
+  const { error } = await supabase.rpc("update_content_fields", {
+    p_content_id: contentId,
+    p: parsed.data as Json,
+  });
   if (error) return { error: friendly(error.message, error.code) };
   revalidatePath(`/content/${contentCode}`);
   revalidatePath("/content");
@@ -116,22 +142,46 @@ export async function updateContent(contentId: string, contentCode: string, patc
 }
 
 /** Form-action wrapper for the Overview tab. Hidden inputs carry ids. */
-export async function updateContentForm(_prev: ActionState, formData: FormData): Promise<ActionState> {
+export async function updateContentForm(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
   const contentId = String(formData.get("content_id") ?? "");
   const contentCode = String(formData.get("content_code") ?? "");
   if (!contentId || !contentCode) return { error: "Missing record id" };
 
   const textKeys = [
-    "title", "description", "request_type", "target_audience", "hook", "concept", "core_message",
-    "audience_takeaway", "cta", "creative_direction", "reference_notes", "production_folder_url",
+    "title",
+    "description",
+    "request_type",
+    "target_audience",
+    "hook",
+    "concept",
+    "core_message",
+    "audience_takeaway",
+    "cta",
+    "creative_direction",
+    "reference_notes",
+    "production_folder_url",
   ];
-  const idKeys = ["program_id", "campaign_id", "campus_id", "content_type_id", "objective_id", "secondary_objective_id", "pillar_id",
-    "dm_owner_id", "production_manager_id", "production_assignee_id"];
+  const idKeys = [
+    "program_id",
+    "campaign_id",
+    "campus_id",
+    "content_type_id",
+    "objective_id",
+    "secondary_objective_id",
+    "pillar_id",
+    "dm_owner_id",
+    "production_manager_id",
+    "production_assignee_id",
+  ];
   const dateKeys = ["target_publish_date", "script_due", "production_due", "review_due"];
 
   const patch: Record<string, unknown> = {};
   const section = String(formData.get("_section") ?? "");
-  for (const k of textKeys) if (formData.has(k)) patch[k] = String(formData.get(k) ?? "").trim() || null;
+  for (const k of textKeys)
+    if (formData.has(k)) patch[k] = String(formData.get(k) ?? "").trim() || null;
   for (const k of idKeys) if (formData.has(k)) patch[k] = String(formData.get(k) ?? "") || null;
   for (const k of dateKeys) if (formData.has(k)) patch[k] = String(formData.get(k) ?? "") || null;
   if (formData.has("priority")) patch.priority = String(formData.get("priority"));
@@ -184,10 +234,17 @@ export async function addComment(_prev: ActionState, formData: FormData): Promis
   return { success: "Comment added" };
 }
 
-export async function resolveComment(commentId: string, contentCode: string, resolved: boolean): Promise<ActionState> {
+export async function resolveComment(
+  commentId: string,
+  contentCode: string,
+  resolved: boolean,
+): Promise<ActionState> {
   await requireActiveUser();
   const supabase = await createClient();
-  const { error } = await supabase.rpc("resolve_comment", { p_comment_id: commentId, p_resolved: resolved });
+  const { error } = await supabase.rpc("resolve_comment", {
+    p_comment_id: commentId,
+    p_resolved: resolved,
+  });
   if (error) return { error: friendly(error.message, error.code) };
   revalidatePath(`/content/${contentCode}`);
   return { success: resolved ? "Resolved" : "Reopened" };

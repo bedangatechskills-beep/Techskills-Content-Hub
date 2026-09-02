@@ -1,5 +1,18 @@
 # Changelog
 
+## Phase 1 — Content Record and Workflow Engine (2026-09-02)
+
+One master Content Record with a permanent ID, moved through 16 stages under database-enforced permission rules, with every move in the Activity tab and on a Kanban board.
+
+- Migration `0001_content_core.sql`: reference tables (regions, campuses, programs, campaigns, platforms, objectives, content pillars, differentiators, content types, reference handles incl. the retired `@techskillsitcareer`, brand facts), `workflow_statuses` (16), `allowed_transitions` (33 rows keyed by permission), `content_records` + platforms/differentiators, `content_id_sequences`, `activity_log`, `stage_history` (generated duration, one open row per record), `comments`, `notifications`; views `v_kanban_cards` (card fields, overdue, live stalled flag) and `v_stage_durations`.
+- RPCs: `create_content_record` (generates `TS-{AU|NP}-{YYMM}-{seq}` in the region timezone), `move_stage` (transition lookup by caller permission, reason enforcement, Final Approver flag for Final Approved, stage history, activity, next-actor notifications), `update_content_fields` (permission by field group, specific audit events for priority, folder link, assignment, due dates), `add_comment`/`edit_comment`/`resolve_comment`, `available_transitions`, `mark_notifications_read`.
+- pgTAP: 35 assertions (ID generation and independence per region, permissions, forward/backward moves, reasons stored, stage-history integrity, Final Approver gate, field-change events, mentions).
+- Screens: `/content` list with filters, `/content/new` intake (region, campus, content type required, "One-off" allowed), `/content/[id]` record page (header with status pill, live stage timer, priority, owners, due dates, "Updated x ago by y", stalled/overdue; move actions with reason dialog; tabs Overview / Script / Production / Reviews / Comments / Activity), `/board` Kanban with drag-and-drop, optimistic move, reason prompt, DB rejection rollback, `/admin/reference` CRUD for all reference tables (soft delete only).
+- Playwright: demo path (Siris creates and moves to Script; Sumeej sees no forward actions; Nil moves back with a reason; Activity shows all events; card on board).
+- Decisions S14–S18 recorded in the vault (video type list, live stalled flag instead of a cron job, reference data edited under RLS, region-timezone month segment, content-review skip rule).
+
+Not yet: comment editing UI (RPC exists), Edge-Function stalled job (replaced by the view column), Phase 6 notification rules (minimal next-actor notifications only).
+
 ## Phase 0 — Foundation (2026-09-02)
 
 Deployed-ready empty app where the team can log in; roles, teams and permissions exist as data with RLS enforcing them.

@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { formatDuration } from "@/lib/workflow/statuses";
 
 /** Live "At this stage: 4 hrs 26 mins" (§69). */
-export function StageTimer({ enteredAt, prefix = "At this stage: " }: { enteredAt: string | null | undefined; prefix?: string }) {
+export function StageTimer({
+  enteredAt,
+  prefix = "At this stage: ",
+}: {
+  enteredAt: string | null | undefined;
+  prefix?: string;
+}) {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 30_000);
