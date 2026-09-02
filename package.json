@@ -18,7 +18,7 @@
     "db:start": "supabase start",
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
-    "db:types": "supabase gen types typescript --local > lib/supabase/database.types.ts",
+    "db:types": "supabase gen types typescript --local > lib/supabase/database.generated.ts",
     "db:push": "supabase db push",
     "functions:serve": "supabase functions serve",
     "functions:deploy": "supabase functions deploy admin-users",

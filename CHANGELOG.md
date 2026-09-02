@@ -15,4 +15,4 @@ Deployed-ready empty app where the team can log in; roles, teams and permissions
 
 Deviations from the plan file, recorded in the vault: `profiles.id` is its own uuid with a nullable `auth_user_id` link (so pending profiles can exist before an auth user); one Edge Function `admin-users` with actions instead of a separate `invite-user`; invitation route is `/invite` (Supabase carries the token); Nepali verifier flag exposed in the admin UI already (S8).
 
-Not done in this phase (needs Docker / cloud credentials on the build machine): running `supabase start`, `supabase test db`, the Playwright run, and the Vercel + Supabase dev deploy.
+Verified locally after installing Docker Desktop: `supabase start` applies migration and seeds; `supabase test db` 43/43; Playwright 3/3; Edge Function invite verified against the local edge runtime and Mailpit. Fixes from those runs: guard trigger now checks `current_user` (was `session_user`), `reactivate_user` casts its enum, transaction-local bypass setting removed as redundant. Types now generated (`database.generated.ts`). Still to do: hosted Supabase + Vercel dev deploy and inviting the real team.

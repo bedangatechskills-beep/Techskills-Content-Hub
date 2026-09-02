@@ -79,9 +79,9 @@ export async function updateUser(_prev: ActionState, formData: FormData): Promis
     p_profile_id: parsed.data.profile_id,
     p_full_name: parsed.data.full_name,
     p_email: parsed.data.email,
-    p_job_title: parsed.data.job_title ?? null,
+    p_job_title: parsed.data.job_title,
     p_role_key: parsed.data.role_key,
-    p_primary_team_key: parsed.data.primary_team_key ?? null,
+    p_primary_team_key: parsed.data.primary_team_key,
     p_team_keys: parsed.data.team_keys,
   });
   if (error) return { error: error.message };
@@ -162,8 +162,8 @@ export async function upsertTeam(_prev: ActionState, formData: FormData): Promis
   const { data, error } = await supabase.rpc("admin_upsert_team", {
     p_key: parsed.data.key,
     p_name: parsed.data.name,
-    p_description: parsed.data.description ?? null,
-    p_supervisor_id: parsed.data.supervisor_id ?? null,
+    p_description: parsed.data.description,
+    p_supervisor_id: parsed.data.supervisor_id,
     p_is_active: parsed.data.is_active,
   });
   if (error) return { error: error.message };

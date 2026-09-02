@@ -279,10 +279,10 @@ create trigger on_auth_user_signed_in
 create or replace function public.protect_profile_privileged_columns()
 returns trigger language plpgsql as $$
 begin
-  -- Bypassed inside admin RPCs (transaction-local setting) and for direct
-  -- superuser maintenance (migrations, seed). Never for PostgREST callers.
-  if current_setting('app.bypass_profile_guard', true) = 'on'
-     or session_user in ('postgres', 'supabase_admin') then
+  -- Security-definer admin RPCs run as their owner (postgres), as do
+  -- migrations, seed and the service role. Plain authenticated callers never
+  -- pass this check.
+  if current_user in ('postgres', 'supabase_admin', 'service_role') then
     return new;
   end if;
   if new.role_id           is distinct from old.role_id
@@ -340,7 +340,6 @@ begin
     raise exception 'unknown role %', p_role_key using errcode = '22023';
   end if;
 
-  perform set_config('app.bypass_profile_guard', 'on', true);
   insert into public.profiles (full_name, email, job_title, role_id, created_by)
   values (trim(p_full_name), lower(trim(p_email)), p_job_title, v_role_id, v_me)
   returning * into v_profile;
@@ -374,7 +373,6 @@ declare
   v_me uuid := public.auth_profile_id();
 begin
   perform public.assert_admin();
-  perform set_config('app.bypass_profile_guard', 'on', true);
 
   -- Nobody may change their own role.
   if p_role_key is not null and p_profile_id = v_me then
@@ -424,7 +422,6 @@ begin
   if p_profile_id = public.auth_profile_id() then
     raise exception 'you cannot change your own Final Approver flag' using errcode = '42501';
   end if;
-  perform set_config('app.bypass_profile_guard', 'on', true);
   update public.profiles set is_final_approver = p_value where id = p_profile_id returning * into v_profile;
   if v_profile.id is null then raise exception 'profile not found' using errcode = 'P0002'; end if;
   return v_profile;
@@ -442,7 +439,6 @@ begin
   if p_profile_id = public.auth_profile_id() then
     raise exception 'you cannot change your own Super Admin flag' using errcode = '42501';
   end if;
-  perform set_config('app.bypass_profile_guard', 'on', true);
   update public.profiles set is_super_admin = p_value where id = p_profile_id returning * into v_profile;
   if v_profile.id is null then raise exception 'profile not found' using errcode = 'P0002'; end if;
   return v_profile;
@@ -454,7 +450,6 @@ language plpgsql security definer set search_path = public as $$
 declare v_profile public.profiles;
 begin
   perform public.assert_admin();
-  perform set_config('app.bypass_profile_guard', 'on', true);
   update public.profiles set can_verify_nepali = p_value where id = p_profile_id returning * into v_profile;
   if v_profile.id is null then raise exception 'profile not found' using errcode = 'P0002'; end if;
   return v_profile;
@@ -471,7 +466,6 @@ begin
   if p_profile_id = public.auth_profile_id() then
     raise exception 'you cannot disable your own account' using errcode = '42501';
   end if;
-  perform set_config('app.bypass_profile_guard', 'on', true);
   update public.profiles
      set account_status = 'disabled', work_status = 'offline'
    where id = p_profile_id
@@ -486,9 +480,8 @@ language plpgsql security definer set search_path = public as $$
 declare v_profile public.profiles;
 begin
   perform public.assert_admin();
-  perform set_config('app.bypass_profile_guard', 'on', true);
   update public.profiles
-     set account_status = case when auth_user_id is null then 'invitation_pending' else 'active' end
+     set account_status = (case when auth_user_id is null then 'invitation_pending' else 'active' end)::public.account_status
    where id = p_profile_id and account_status = 'disabled'
   returning * into v_profile;
   if v_profile.id is null then raise exception 'profile not found or not disabled' using errcode = 'P0002'; end if;
