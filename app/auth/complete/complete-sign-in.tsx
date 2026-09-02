@@ -28,12 +28,29 @@ export function CompleteSignIn() {
 
     const supabase = createClient();
     let done = false;
+    // Hard navigation: the server must see the new cookie on the next request,
+    // and it discards the token fragment from history.
     const go = () => {
       if (done) return;
       done = true;
-      router.replace(next);
-      router.refresh();
+      window.location.replace(next);
     };
+
+    // Admin-generated links use the implicit flow; the client is configured
+    // for PKCE and ignores that fragment, so set the session explicitly.
+    const accessToken = hash.get("access_token");
+    const refreshToken = hash.get("refresh_token");
+    if (accessToken && refreshToken) {
+      supabase.auth
+        .setSession({ access_token: accessToken, refresh_token: refreshToken })
+        .then(({ error }) => {
+          if (error) {
+            router.replace(`/auth/error?message=${encodeURIComponent(error.message)}`);
+            return;
+          }
+          go();
+        });
+    }
 
     const {
       data: { subscription },
