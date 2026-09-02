@@ -54,7 +54,7 @@ describe("isFinalApprover()", () => {
 
 describe("visibleNav()", () => {
   it("hides admin items without admin.users", () => {
-    expect(visibleNav(access()).map((i) => i.href)).toEqual(["/"]);
+    expect(visibleNav(access()).map((i) => i.href)).toEqual(["/", "/board", "/content"]);
   });
   it("shows admin items for admins", () => {
     expect(visibleNav(access({}, ["admin.users"])).map((i) => i.href)).toContain("/admin/users");

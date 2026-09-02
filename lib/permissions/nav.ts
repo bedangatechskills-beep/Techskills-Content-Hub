@@ -14,6 +14,9 @@ export interface NavItem {
 // server-side: every page re-checks).
 export const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Dashboard" },
+  { href: "/board", label: "Board" },
+  { href: "/content", label: "Content" },
+  { href: "/admin/reference", label: "Reference data", requires: "admin.reference_data" },
   { href: "/admin/users", label: "Users", requires: "admin.users" },
   { href: "/admin/teams", label: "Teams", requires: "admin.users" },
 ];

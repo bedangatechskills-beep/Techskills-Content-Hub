@@ -56,3 +56,21 @@ where p.email = v.email;
 update public.teams t set supervisor_id = p.id
 from public.profiles p
 where t.key = 'production' and p.email = 'nil@techskills.institute';
+
+-- ---------------------------------------------------------------------------
+-- Phase 1 dev reference data: programs and campaigns (examples from the spec)
+-- ---------------------------------------------------------------------------
+insert into public.programs (name, description, location) values
+  ('AI-Powered Web Application Developer Job Ready Program', 'Flagship full-stack program.', 'AU + NP'),
+  ('Cyber Security Job Ready Program', 'Security fundamentals to SOC readiness.', 'AU'),
+  ('Data Analytics Job Ready Program', 'Analytics and BI career track.', 'AU + NP')
+on conflict (name) do nothing;
+
+insert into public.campaigns (name, program_id, start_date, end_date, status, notes)
+select v.name, p.id, v.start_date::date, v.end_date::date, v.status, v.notes
+from (values
+  ('September Kathmandu Intake', 'AI-Powered Web Application Developer Job Ready Program', '2026-09-01', '2026-09-30', 'active', 'NP intake push'),
+  ('October Sydney Open Day', 'Cyber Security Job Ready Program', '2026-10-01', '2026-10-15', 'planned', 'North Strathfield + Rockdale')
+) as v(name, program_name, start_date, end_date, status, notes)
+join public.programs p on p.name = v.program_name
+where not exists (select 1 from public.campaigns c where c.name = v.name);
