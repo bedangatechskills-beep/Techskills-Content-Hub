@@ -26,7 +26,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ id:
           <ArrowLeft className="size-3.5" /> All teams
         </Link>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold">{team.name}</h1>
+          <h1 className="page-title">{team.name}</h1>
           {team.is_active ? <Badge>Active</Badge> : <Badge variant="outline">Inactive</Badge>}
         </div>
         {team.description ? <p className="text-muted-foreground">{team.description}</p> : null}

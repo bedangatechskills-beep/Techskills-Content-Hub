@@ -11,7 +11,7 @@ export default async function NewUserPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">Invite a user</h1>
+        <h1 className="page-title">Invite a user</h1>
         <p className="text-muted-foreground">
           Creates the staff profile and e-mails a one-time link. The person sets their own password
           on first sign-in. Final Approver and Super Admin are toggled afterwards on the profile

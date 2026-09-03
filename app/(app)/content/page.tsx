@@ -48,7 +48,7 @@ export default async function ContentListPage({ searchParams }: { searchParams: 
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">Content</h1>
+          <h1 className="page-title">Content</h1>
           <p className="text-muted-foreground">
             Every piece of content, one record each, from request to publish.
           </p>

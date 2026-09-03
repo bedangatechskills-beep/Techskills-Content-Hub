@@ -25,7 +25,7 @@ export default async function ScriptApprovalsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">Script approvals</h1>
+        <h1 className="page-title">Script approvals</h1>
         <p className="text-muted-foreground">
           Versions waiting for your decision. Approving pins that exact version.
         </p>

@@ -10,11 +10,26 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Hello, {profile.full_name.split(" ")[0]}</h1>
-        <p className="text-muted-foreground">
-          Role dashboards arrive in Phase 6. This placeholder shows what the system loaded for you
-          at sign-in.
+      <div className="bg-brand-navy relative overflow-hidden rounded-xl p-6 text-white md:p-8">
+        <div
+          className="pointer-events-none absolute -top-16 -right-10 size-64 rounded-full opacity-40 blur-3xl"
+          style={{ background: "#005ea1" }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -bottom-20 left-1/3 size-48 rounded-full opacity-30 blur-3xl"
+          style={{ background: "#f05921" }}
+          aria-hidden
+        />
+        <p className="text-brand-orange relative text-xs font-semibold tracking-[0.2em] uppercase">
+          TechSkills Content Hub
+        </p>
+        <h1 className="relative mt-1 text-3xl font-bold text-white">
+          Hello, {profile.full_name.split(" ")[0]}
+        </h1>
+        <p className="relative mt-2 max-w-xl text-white/75">
+          Role dashboards arrive in Phase 6. Until then, the Board and Content pages are the working
+          views. Below is what the system loaded for you at sign-in.
         </p>
       </div>
 

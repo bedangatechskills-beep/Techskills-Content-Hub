@@ -25,7 +25,7 @@ export default async function ReferencePage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">Reference data</h1>
+        <h1 className="page-title">Reference data</h1>
         <p className="text-muted-foreground">
           The canonical lists every gate checks against. Managed here, never typed free-form on a
           record.

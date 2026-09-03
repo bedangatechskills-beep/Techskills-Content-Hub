@@ -67,7 +67,7 @@ export default async function ScriptApprovalDetailPage({
         </Link>
         <div className="flex flex-wrap items-center gap-3">
           <span className="font-mono text-sm">{record.content_id}</span>
-          <h1 className="text-2xl font-semibold">{record.title}</h1>
+          <h1 className="page-title">{record.title}</h1>
           <PriorityBadge priority={record.priority} />
           <Badge variant="secondary">{record.region_code}</Badge>
         </div>

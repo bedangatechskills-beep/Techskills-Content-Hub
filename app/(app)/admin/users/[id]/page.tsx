@@ -37,7 +37,7 @@ export default async function UserDetailPage({
           <ArrowLeft className="size-3.5" /> All users
         </Link>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold">{user.full_name}</h1>
+          <h1 className="page-title">{user.full_name}</h1>
           <StatusBadge status={user.account_status} />
           {isSelf ? <span className="text-muted-foreground text-sm">(this is you)</span> : null}
         </div>

@@ -24,7 +24,7 @@ export default async function UsersPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">Users</h1>
+          <h1 className="page-title">Users</h1>
           <p className="text-muted-foreground">
             Staff profiles, roles and flags. Users are disabled, never deleted.
           </p>

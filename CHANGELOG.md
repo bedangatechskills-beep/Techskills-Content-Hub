@@ -13,7 +13,6 @@ The first real quality gate: scripts are versioned in the app, an AI evaluation 
 
 To switch on the real model: `supabase secrets set AI_PROVIDER=anthropic ANTHROPIC_API_KEY=sk-ant-…` (optional `ANTHROPIC_MODEL`). Golden cases against the real provider are a manual check after that.
 
-
 ## Phase 1 — Content Record and Workflow Engine (2026-09-02)
 
 One master Content Record with a permanent ID, moved through 16 stages under database-enforced permission rules, with every move in the Activity tab and on a Kanban board.

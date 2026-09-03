@@ -30,7 +30,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
     <div className="flex h-full min-h-[calc(100vh-4rem)] flex-col gap-4">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">Board</h1>
+          <h1 className="page-title">Board</h1>
           <p className="text-muted-foreground text-sm">
             Drag a card to move it. The database decides whether the move is allowed and asks for a
             reason on backward moves.

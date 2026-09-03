@@ -1,7 +1,6 @@
 import { LogOut } from "lucide-react";
 import { signOut } from "@/lib/auth/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Access } from "@/lib/permissions/access";
 
@@ -16,20 +15,29 @@ function initials(name: string) {
 export function UserMenu({ access }: { access: Access }) {
   const { profile, role } = access;
   return (
-    <div className="border-sidebar-border flex items-center gap-3 border-t pt-4">
-      <Avatar>
+    <div className="flex items-center gap-3">
+      <Avatar className="ring-brand-orange/70 ring-2">
         {profile.photo_url ? <AvatarImage src={profile.photo_url} alt="" /> : null}
-        <AvatarFallback>{initials(profile.full_name)}</AvatarFallback>
+        <AvatarFallback className="bg-brand-blue text-xs font-semibold text-white">
+          {initials(profile.full_name)}
+        </AvatarFallback>
       </Avatar>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{profile.full_name}</p>
-        <div className="flex flex-wrap gap-1 pt-0.5">
-          {role ? <Badge variant="secondary">{role.name}</Badge> : null}
-          {profile.is_final_approver ? <Badge>Final Approver</Badge> : null}
-        </div>
+        <p className="truncate text-sm font-medium text-white">{profile.full_name}</p>
+        <p className="text-sidebar-foreground/60 truncate text-[11px]">
+          {role?.name ?? "No role"}
+          {profile.is_final_approver ? " · Final Approver" : ""}
+        </p>
       </div>
       <form action={signOut}>
-        <Button type="submit" variant="ghost" size="icon" aria-label="Sign out" title="Sign out">
+        <Button
+          type="submit"
+          variant="ghost"
+          size="icon"
+          aria-label="Sign out"
+          title="Sign out"
+          className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-white"
+        >
           <LogOut className="size-4" />
         </Button>
       </form>

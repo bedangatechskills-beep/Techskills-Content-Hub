@@ -23,7 +23,7 @@ export default async function TeamsPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold">Teams</h1>
+          <h1 className="page-title">Teams</h1>
           <p className="text-muted-foreground">
             Working groups. A person can belong to several; roles are separate.
           </p>
