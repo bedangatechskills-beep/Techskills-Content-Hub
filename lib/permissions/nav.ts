@@ -23,6 +23,8 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/reviews/dm", label: "DM reviews", requires: "dm.review" },
   { href: "/reviews/content", label: "Content reviews", requires: "review.rate" },
   { href: "/approvals/final", label: "Final approvals", requires: "final.approve" },
+  { href: "/publishing", label: "Publishing", requires: "publish.publish" },
+  { href: "/calendar", label: "Calendar" },
   { href: "/admin/reference", label: "Reference data", requires: "admin.reference_data" },
   { href: "/admin/users", label: "Users", requires: "admin.users" },
   { href: "/admin/teams", label: "Teams", requires: "admin.users" },

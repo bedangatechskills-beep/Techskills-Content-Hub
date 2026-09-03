@@ -88,3 +88,15 @@ export type FinalApprovalRow = Tables<"final_approvals">;
 // AI queue provider
 export type AiRequestStatus = Enums<"ai_request_status">;
 export type AiEvaluationRequestRow = Tables<"ai_evaluation_requests">;
+
+// Phase 6
+export type ScheduleRow = Tables<"schedules">;
+export type PublishedLinkRow = Tables<"published_links">;
+export type PublishConfirmationRow = Tables<"publish_confirmations">;
+export type NotificationRuleRow = Tables<"notification_rules">;
+export type PublishingQueueRow = Database["public"]["Views"]["v_publishing_queue"]["Row"];
+export type PublishedLinkViewRow = Database["public"]["Views"]["v_published_links"]["Row"];
+export type CalendarItemRow = Database["public"]["Views"]["v_calendar_items"]["Row"];
+export type PipelineCountRow = Database["public"]["Views"]["v_pipeline_counts"]["Row"];
+export type NeedsAttentionRow = Database["public"]["Views"]["v_needs_attention"]["Row"];
+export type ContentMixRow = Database["public"]["Views"]["v_content_mix"]["Row"];

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  CalendarDays,
   CheckSquare,
   Clapperboard,
   Columns3,
@@ -11,6 +12,7 @@ import {
   LayoutDashboard,
   Library,
   ShieldCheck,
+  Send,
   Star,
   ListTodo,
   Users,
@@ -27,6 +29,8 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   "/reviews/dm": Eye,
   "/reviews/content": Star,
   "/approvals/final": ShieldCheck,
+  "/publishing": Send,
+  "/calendar": CalendarDays,
   "/team": UsersRound,
   "/me": ListTodo,
   "/production": Clapperboard,

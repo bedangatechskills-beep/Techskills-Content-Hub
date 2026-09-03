@@ -71,6 +71,10 @@ scripts/        bootstrap-admin.ts
 
 See `CHANGELOG.md` for what each phase delivered.
 
+## Publishing and reminders
+
+Scheduling, publishing (with the AI-disclosure confirmation) and archiving are RPCs (`schedule_content`, `publish_content`, `archive_content`). Notification types are rows in `notification_rules`; an administrator can switch any type off. Daily reminders run from pg_cron (`run_daily_reminders()`, 21:00 UTC). If pg_cron is unavailable, call the function from any scheduler with the service role.
+
 ## AI provider modes
 
 `AI_PROVIDER` (Edge Function secret on the hosted project; `supabase/functions/.env` locally) selects the adapter:

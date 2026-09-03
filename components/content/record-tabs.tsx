@@ -6,6 +6,7 @@ export const TABS = [
   { key: "script", label: "Script" },
   { key: "production", label: "Production" },
   { key: "reviews", label: "Reviews" },
+  { key: "publishing", label: "Publishing" },
   { key: "comments", label: "Comments" },
   { key: "activity", label: "Activity" },
 ] as const;

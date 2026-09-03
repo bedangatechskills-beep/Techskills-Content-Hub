@@ -4,10 +4,16 @@ import { visibleNav } from "@/lib/permissions/nav";
 import { SidebarNav } from "@/components/shell/sidebar";
 import { UserMenu } from "@/components/shell/user-menu";
 import { BrandLogo } from "@/components/shell/brand-logo";
+import { NotificationBell } from "@/components/shell/notification-bell";
+import { getNotifications, getUnreadCount } from "@/lib/notifications/queries";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const access = await requireActiveUser();
   const items = visibleNav(access);
+  const [unread, notifications] = await Promise.all([getUnreadCount(), getNotifications(8)]);
+  const bell = (
+    <NotificationBell profileId={access.profile.id} unread={unread} items={notifications} />
+  );
 
   return (
     <div className="flex min-h-screen">
@@ -23,8 +29,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </p>
           <SidebarNav items={items} />
         </div>
-        <div className="border-sidebar-border border-t px-4 py-4">
-          <UserMenu access={access} />
+        <div className="border-sidebar-border flex items-center gap-2 border-t px-4 py-4">
+          <div className="min-w-0 flex-1">
+            <UserMenu access={access} />
+          </div>
+          {bell}
         </div>
       </aside>
 
@@ -34,6 +43,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
             <Link href="/">
               <BrandLogo variant="light" />
             </Link>
+            {bell}
           </div>
           <nav className="flex gap-4 overflow-x-auto px-4 pb-3 text-sm">
             {items.map((i) => (

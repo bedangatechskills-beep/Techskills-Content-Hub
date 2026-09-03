@@ -60,6 +60,7 @@ describe("visibleNav()", () => {
       "/content",
       "/team",
       "/me",
+      "/calendar",
     ]);
   });
   it("shows admin items for admins", () => {

@@ -1,5 +1,15 @@
 # Changelog
 
+## Phase 6 — Scheduling, Publishing and Dashboards (2026-09-03)
+
+The loop closes to the platforms. Siris schedules per platform, Keshar publishes with live URLs and the logged AI-disclosure confirmation, every role opens on its own dashboard, the bell is live, and reminders arrive each morning.
+
+- Migration `0010_publishing.sql`: `schedules` (one active row per platform; cancelled rows kept), `published_links`, `publish_confirmations` (always written on publish; disclosure required/confirmed, by whom, when), `notification_rules` (29 event types, recipient rule tokens, templates, on/off), `content_records.published_at` / `archived_at`; `notify()` honours the rule switch; `notify_event()` resolves recipients from rules; triggers for AI hard flags (scripts) and Nepali verification requested; Realtime on `notifications`.
+- RPCs: `schedule_content` (replaces the active schedule; new rows logged `scheduled`; changes logged `publishing_date_change` with a mandatory reason on date changes; Final Approved → Scheduled), `unschedule_content` (reason mandatory), `publish_content` (Publisher; http(s) URLs per platform; refused without the confirmation when `requires_ai_disclosure`; logs `publication` and `ai_disclosure_confirmed`; Scheduled → Published), `archive_content` (DM Manager or admin), `mark_notification_read`, `mark_all_notifications_read`, `unread_notification_count`, `dashboard_cards()` (every §84–89 count in one call plus the AI gate tile), `run_daily_reminders()` on pg_cron at 21:00 UTC. Views `v_publishing_queue`, `v_published_links`, `v_calendar_items`, `v_pipeline_counts`, `v_needs_attention`, `v_content_mix`. The four late transitions are RPC-only.
+- Screens: record **Publishing tab** (schedule rows with publisher and notes, disclosure badge, publish form with the blocking checkbox, live URLs, confirmations, unschedule/archive); `/publishing` publisher queue (Today, This week, Later, Disclosure pending, Recently published); `/calendar` month and week with the §91 filters and bank depth; role dashboards on `/` (cards by variant, Needs Attention, pipeline bar, active team, upcoming, content mix, AI gate tile); notification bell with live unread count, latest items, mark read and deep links; `/notifications`.
+- Tests: pgTAP 41 new (271 total), Vitest 54, Playwright demo path (Siris schedules Instagram and Facebook → Keshar blocked by the disclosure checkbox → ticks it → publishes with URLs → Biraj's dashboard shows Published This Month and the bell shows the notice).
+- Decisions S33–S38 recorded. Hosted: migration pushed.
+
 ## Phase 5 — Content Review and Final Approval (2026-09-03)
 
 The optional reviewer stage with quorum and threshold, the system-computed checklist that decides whether Biraj sees an item at all, the final approval screen with exact version pinning, permanent overrides, and re-approval on material creative change. The promise to the CEO is now real: he only sees checked work.

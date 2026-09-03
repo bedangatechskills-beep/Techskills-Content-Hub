@@ -30,6 +30,8 @@ import { getGateStatus, getReviewsTab } from "@/lib/review/queries";
 import { ReviewsTab } from "@/components/content/reviews/reviews-tab";
 import { getFinalTab } from "@/lib/final/queries";
 import { CreativeChangedBanner } from "@/components/content/final/creative-banner";
+import { getPublishingTab } from "@/lib/publishing/queries";
+import { PublishingTab } from "@/components/content/publishing/publishing-tab";
 
 export async function generateMetadata({ params }: { params: Promise<{ contentId: string }> }) {
   const { contentId } = await params;
@@ -49,30 +51,41 @@ export default async function ContentRecordPage({
   if (!detail) notFound();
 
   const active = isTabKey(tab) ? tab : "overview";
-  const [refData, comments, activity, history, script, production, reviews, gate, final] =
-    await Promise.all([
-      getReferenceData(),
-      getComments(detail.record.id),
-      active === "activity" ? getActivity(detail.record.id) : Promise.resolve([]),
-      active === "overview" ? getStageHistory(detail.record.id) : Promise.resolve([]),
-      getScriptTab(
-        detail.record.id,
-        detail.record.current_script_version_id,
-        detail.record.approved_script_version_id,
-      ),
-      active === "production"
-        ? getProductionTab(detail.record.id, detail.record.current_creative_version_id)
-        : Promise.resolve(null),
-      active === "production" || active === "reviews"
-        ? getReviewsTab(detail.record.id, detail.record.current_creative_version_id)
-        : Promise.resolve(null),
-      getGateStatus(detail.record.id),
-      getFinalTab(
-        detail.record.id,
-        detail.record.current_creative_version_id,
-        detail.record.approved_creative_version_id,
-      ),
-    ]);
+  const [
+    refData,
+    comments,
+    activity,
+    history,
+    script,
+    production,
+    reviews,
+    gate,
+    final,
+    publishing,
+  ] = await Promise.all([
+    getReferenceData(),
+    getComments(detail.record.id),
+    active === "activity" ? getActivity(detail.record.id) : Promise.resolve([]),
+    active === "overview" ? getStageHistory(detail.record.id) : Promise.resolve([]),
+    getScriptTab(
+      detail.record.id,
+      detail.record.current_script_version_id,
+      detail.record.approved_script_version_id,
+    ),
+    active === "production"
+      ? getProductionTab(detail.record.id, detail.record.current_creative_version_id)
+      : Promise.resolve(null),
+    active === "production" || active === "reviews"
+      ? getReviewsTab(detail.record.id, detail.record.current_creative_version_id)
+      : Promise.resolve(null),
+    getGateStatus(detail.record.id),
+    getFinalTab(
+      detail.record.id,
+      detail.record.current_creative_version_id,
+      detail.record.approved_creative_version_id,
+    ),
+    active === "publishing" ? getPublishingTab(detail.record.id) : Promise.resolve(null),
+  ]);
 
   const banner = (
     <>
@@ -112,6 +125,7 @@ export default async function ContentRecordPage({
           comments: comments.length,
           script: script.versions.length,
           ...(gate ? { reviews: gate.open_change_requests + gate.open_hard_flag_count } : {}),
+          ...(publishing ? { publishing: publishing.schedules.length } : {}),
           ...(production
             ? {
                 production: production.tasks.filter(
@@ -142,6 +156,10 @@ export default async function ContentRecordPage({
       ) : null}
       {active === "reviews" && reviews ? (
         <ReviewsTab detail={detail} data={reviews} final={final} access={access} />
+      ) : null}
+
+      {active === "publishing" && publishing ? (
+        <PublishingTab detail={detail} data={publishing} access={access} />
       ) : null}
 
       {active === "comments" ? (
