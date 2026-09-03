@@ -20,6 +20,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/me", label: "My backlog" },
   { href: "/production", label: "Production", requires: "production.assign" },
   { href: "/approvals/scripts", label: "Script approvals", requires: "script.approve" },
+  { href: "/reviews/dm", label: "DM reviews", requires: "dm.review" },
   { href: "/admin/reference", label: "Reference data", requires: "admin.reference_data" },
   { href: "/admin/users", label: "Users", requires: "admin.users" },
   { href: "/admin/teams", label: "Teams", requires: "admin.users" },

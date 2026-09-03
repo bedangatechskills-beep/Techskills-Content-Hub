@@ -1,5 +1,17 @@
 # Changelog
 
+## Phase 4 — Creative Gate and DM Review (2026-09-03)
+
+The second gate. Every reviewed creative gets an AI evaluation that lists objective defects first and marketing scores second; Siris reviews with the defects already surfaced; change requests route to the right team and the loop re-runs the gate automatically.
+
+- Migrations `0005_creative_gate.sql` and `0006_changes_routing_assignee.sql`: `dm_reviews`, `change_requests` (one row per item, category routing, revision number), gate settings in `app_settings`, D6 platform formats in `brand_facts.platform_formats`, service-only `record_creative_evaluation` (stores the evaluation, logs, sets `requires_ai_disclosure` and Nepali pending, notifies), `gate_status(content)` (open flags, Nepali, disclosure, open requests, tasks, folder, script approved), `dm_review` (approve → Content Review or Ready for Final Approval; changes → requests + Changes Required with reason), `resolve_change_request`, `reopen_change_request`, `route_changes_required`, assignee may resolve creative flags, `v_dm_review_queue`, `v_creative_ai_latest`, Kanban gains creative verdict and open counts; DM and loop transitions RPC-only.
+- AI: `lib/ai/creative-schemas.ts` (9 categories, 24 flag keys incl. **`format_safe_zone` for D6: 4:5 feed statics, ~10% safe margin, one message per creative**, Group 2 keys reported `not_configured` without brand facts), prompt `creative.v1` (vision), mock (dimension-based format check + note hints) and Anthropic adapters (`evaluateCreative` with base64 images), Edge Function `evaluate-creative` (permission via RPC, downloads the private file, idempotency, cost guard). Auto re-run after upload and after Production Review pass (S27).
+- Screens: shared evaluation panel; Production tab AI creative card; Reviews tab (gate status, change requests with resolve/reopen, route box, DM review history); header gate badges; `/reviews/dm` queue and review screen (creative beside approved copy, flags first, §39 checklist, change items with category); Kanban creative chip.
+- Tests: pgTAP 27 new (183 total), Vitest 13 new golden cases (62 total incl. D6 wide-infographic and 4:5 pass), Playwright demo path (flawed poster → auto flags → production pass → DM requests changes → resolve → route → clean V2 → gate clean → approve → Ready for Final Approval).
+- Decisions D6 and S26–S28 recorded. Hosted: migrations pushed, both Edge Functions redeployed with the pinned import map.
+
+Not done: video frame sampling (metadata + copy only), thumbnail crops of flagged regions, golden tests with fixture images against the real provider (manual once a key is set).
+
 ## Phase 3 — Production and Workload (2026-09-03)
 
 Nil can delegate, editors work tasks and upload review versions, Nil passes or returns production, and everyone sees who has what on the Team Board and a per-person backlog.
@@ -11,7 +23,6 @@ Nil can delegate, editors work tasks and upload review versions, Nil passes or r
 - Decisions S23–S25 recorded. Hosted: migration pushed.
 
 Not done: thumbnail/poster-frame generation (previews use signed URLs and native video), task-due-today cron notification (Phase 6 notification rules).
-
 
 ## Phase 2 — Script Gate (2026-09-02)
 

@@ -128,6 +128,31 @@ export const KanbanCard = forwardRef<HTMLDivElement, KanbanCardProps>(function K
             AI {card.ai_score}/10{card.ai_flag_count ? ` · ${card.ai_flag_count} flags` : ""}
           </span>
         ) : null}
+        {card.creative_ai_score != null ? (
+          <span
+            className={cn(
+              "inline-flex items-center gap-1 rounded px-1 font-medium",
+              card.creative_ai_verdict === "significant_issues"
+                ? "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200"
+                : card.creative_ai_verdict === "improve_before_review"
+                  ? "bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-200"
+                  : "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200",
+            )}
+            title={`AI creative score ${card.creative_ai_score}/10 · ${card.creative_open_flags ?? 0} open flags`}
+          >
+            Creative AI {card.creative_ai_score}/10
+          </span>
+        ) : null}
+        {card.creative_open_flags ? (
+          <span className="rounded bg-red-100 px-1 font-medium text-red-800 dark:bg-red-900/40 dark:text-red-200">
+            {card.creative_open_flags} flag{card.creative_open_flags === 1 ? "" : "s"}
+          </span>
+        ) : null}
+        {card.open_change_requests ? (
+          <span className="rounded bg-orange-100 px-1 font-medium text-orange-800 dark:bg-orange-900/40 dark:text-orange-200">
+            {card.open_change_requests} change{card.open_change_requests === 1 ? "" : "s"}
+          </span>
+        ) : null}
       </div>
 
       {card.is_stalled ? (

@@ -201,7 +201,10 @@ export function CreativesCard({
                 <Upload className="size-4" aria-hidden />{" "}
                 {pending ? (step ?? "Working…") : "Upload review version"}
               </Button>
-              <p className="text-muted-foreground text-xs">Images, video or PDF, up to 500 MB.</p>
+              <p className="text-muted-foreground text-xs">
+                Images, video or PDF, up to 500 MB. The gate re-runs automatically on each new
+                version.
+              </p>
             </div>
           </div>
         ) : null}

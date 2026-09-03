@@ -19,7 +19,6 @@ import {
   SettingsForm,
 } from "@/components/content/overview-forms";
 import { StageHistoryCard } from "@/components/content/stage-history-card";
-import { PlaceholderTab } from "@/components/content/placeholder-tab";
 import { CommentsTab } from "@/components/content/comments-tab";
 import { ActivityTab } from "@/components/content/activity-tab";
 import { getScriptTab } from "@/lib/script/queries";
@@ -27,6 +26,8 @@ import { ScriptTab } from "@/components/content/script/script-tab";
 import { ScriptChangedBanner } from "@/components/content/script/script-banner";
 import { getProductionTab } from "@/lib/production/queries";
 import { ProductionTab } from "@/components/content/production/production-tab";
+import { getGateStatus, getReviewsTab } from "@/lib/review/queries";
+import { ReviewsTab } from "@/components/content/reviews/reviews-tab";
 
 export async function generateMetadata({ params }: { params: Promise<{ contentId: string }> }) {
   const { contentId } = await params;
@@ -46,20 +47,25 @@ export default async function ContentRecordPage({
   if (!detail) notFound();
 
   const active = isTabKey(tab) ? tab : "overview";
-  const [refData, comments, activity, history, script, production] = await Promise.all([
-    getReferenceData(),
-    getComments(detail.record.id),
-    active === "activity" ? getActivity(detail.record.id) : Promise.resolve([]),
-    active === "overview" ? getStageHistory(detail.record.id) : Promise.resolve([]),
-    getScriptTab(
-      detail.record.id,
-      detail.record.current_script_version_id,
-      detail.record.approved_script_version_id,
-    ),
-    active === "production"
-      ? getProductionTab(detail.record.id, detail.record.current_creative_version_id)
-      : Promise.resolve(null),
-  ]);
+  const [refData, comments, activity, history, script, production, reviews, gate] =
+    await Promise.all([
+      getReferenceData(),
+      getComments(detail.record.id),
+      active === "activity" ? getActivity(detail.record.id) : Promise.resolve([]),
+      active === "overview" ? getStageHistory(detail.record.id) : Promise.resolve([]),
+      getScriptTab(
+        detail.record.id,
+        detail.record.current_script_version_id,
+        detail.record.approved_script_version_id,
+      ),
+      active === "production"
+        ? getProductionTab(detail.record.id, detail.record.current_creative_version_id)
+        : Promise.resolve(null),
+      active === "production" || active === "reviews"
+        ? getReviewsTab(detail.record.id, detail.record.current_creative_version_id)
+        : Promise.resolve(null),
+      getGateStatus(detail.record.id),
+    ]);
 
   const banner =
     script.changedAfterApproval && script.current && script.approved ? (
@@ -84,7 +90,7 @@ export default async function ContentRecordPage({
         <ArrowLeft className="size-3.5" /> All content
       </Link>
 
-      <RecordHeader detail={detail} refData={refData} banner={banner} />
+      <RecordHeader detail={detail} refData={refData} banner={banner} gate={gate} />
 
       <RecordTabs
         code={detail.record.content_id}
@@ -92,6 +98,7 @@ export default async function ContentRecordPage({
         counts={{
           comments: comments.length,
           script: script.versions.length,
+          ...(gate ? { reviews: gate.open_change_requests + gate.open_hard_flag_count } : {}),
           ...(production
             ? {
                 production: production.tasks.filter(
@@ -118,14 +125,10 @@ export default async function ContentRecordPage({
 
       {active === "script" ? <ScriptTab detail={detail} data={script} access={access} /> : null}
       {active === "production" && production ? (
-        <ProductionTab detail={detail} data={production} access={access} />
+        <ProductionTab detail={detail} data={production} access={access} reviews={reviews} />
       ) : null}
-      {active === "reviews" ? (
-        <PlaceholderTab
-          title="Reviews"
-          phase="Phases 4 and 5"
-          body="AI creative and brand score, DM review, reviewer ratings with quorum, the final approval checklist and final approval."
-        />
+      {active === "reviews" && reviews ? (
+        <ReviewsTab detail={detail} data={reviews} access={access} />
       ) : null}
 
       {active === "comments" ? (

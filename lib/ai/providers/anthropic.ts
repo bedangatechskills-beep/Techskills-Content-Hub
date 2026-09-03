@@ -2,7 +2,18 @@
 // schema; the strict Zod schema is applied again before storage.
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-import type { AIProvider, ProviderResult, ScriptPrompt } from "../provider.ts";
+import type {
+  AIProvider,
+  CreativeProviderResult,
+  ImageAttachment,
+  ProviderResult,
+  ScriptPrompt,
+} from "../provider.ts";
+import {
+  creativeEvaluationOutputSchema,
+  creativeEvaluationSchema,
+  type CreativeEvaluationInput,
+} from "../creative-schemas.ts";
 import {
   scriptEvaluationOutputSchema,
   scriptEvaluationSchema,
@@ -20,6 +31,42 @@ export class AnthropicProvider implements AIProvider {
     this.model = model ?? DEFAULT_ANTHROPIC_MODEL;
     // 90 s: a script evaluation is short; the Edge Function budget is 150 s.
     this.client = new Anthropic({ apiKey, timeout: 90_000, maxRetries: 2 });
+  }
+
+  async evaluateCreative(
+    _input: CreativeEvaluationInput,
+    prompt: ScriptPrompt,
+    images: ImageAttachment[],
+  ): Promise<CreativeProviderResult> {
+    const content: Anthropic.ContentBlockParam[] = [
+      ...images.map((img) => ({
+        type: "image" as const,
+        source: { type: "base64" as const, media_type: img.media_type, data: img.base64 },
+      })),
+      { type: "text" as const, text: prompt.user },
+    ];
+    const response = await this.client.messages.parse({
+      model: this.model,
+      max_tokens: 6000,
+      system: prompt.system,
+      messages: [{ role: "user", content }],
+      output_config: { format: zodOutputFormat(creativeEvaluationOutputSchema), effort: "medium" },
+    });
+    if (response.stop_reason === "refusal") {
+      throw new Error("The model declined to evaluate this creative.");
+    }
+    if (!response.parsed_output) {
+      throw new Error("The model returned an answer that did not match the expected shape.");
+    }
+    const evaluation = creativeEvaluationSchema.parse({
+      ...response.parsed_output,
+      recommendations: response.parsed_output.recommendations.slice(0, 3),
+    });
+    return {
+      evaluation,
+      model: response.model,
+      raw: { id: response.id, usage: response.usage, stop_reason: response.stop_reason },
+    };
   }
 
   async evaluateScript(

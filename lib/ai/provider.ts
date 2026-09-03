@@ -1,6 +1,7 @@
 // Swappable AI provider (D2). The app and the Edge Function pick an adapter by
 // the AI_PROVIDER environment variable. Prompts and schemas live in the repo.
 import type { ScriptEvaluation, ScriptEvaluationInput } from "./schemas.ts";
+import type { CreativeEvaluation, CreativeEvaluationInput } from "./creative-schemas.ts";
 
 export interface ScriptPrompt {
   system: string;
@@ -13,10 +14,28 @@ export interface ProviderResult {
   raw: unknown;
 }
 
+/** An image handed to a vision model. */
+export interface ImageAttachment {
+  media_type: "image/png" | "image/jpeg" | "image/webp" | "image/gif";
+  base64: string;
+  label?: string;
+}
+
+export interface CreativeProviderResult {
+  evaluation: CreativeEvaluation;
+  model: string;
+  raw: unknown;
+}
+
 export interface AIProvider {
   readonly name: string;
   readonly model: string;
   evaluateScript(input: ScriptEvaluationInput, prompt: ScriptPrompt): Promise<ProviderResult>;
+  evaluateCreative(
+    input: CreativeEvaluationInput,
+    prompt: ScriptPrompt,
+    images: ImageAttachment[],
+  ): Promise<CreativeProviderResult>;
 }
 
 export type ProviderName = "mock" | "anthropic";

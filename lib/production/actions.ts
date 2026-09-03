@@ -5,6 +5,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { requireActiveUser } from "@/lib/auth/access.server";
 import type { ActionState } from "@/lib/auth/actions";
+import { autoRunCreativeCheck } from "@/lib/review/actions";
 import type {
   CreativeKind,
   Json,
@@ -154,7 +155,7 @@ export async function registerCreativeVersion(input: {
 }): Promise<ActionState> {
   await requireActiveUser();
   const supabase = await createClient();
-  const { error } = await supabase.rpc("register_creative_version", {
+  const { data, error } = await supabase.rpc("register_creative_version", {
     p_content_id: input.contentId,
     p_storage_path: input.path,
     p_file_name: input.fileName,
@@ -167,6 +168,8 @@ export async function registerCreativeVersion(input: {
     p_note: input.note,
   });
   if (error) return { error: error.message };
+  // S9: the creative gate re-runs automatically on every new version.
+  await autoRunCreativeCheck(data.id, input.code);
   revalidateAll(input.code);
   return { success: "Review version uploaded" };
 }
@@ -202,6 +205,16 @@ export async function productionReview(
     p_notes: notes?.trim() || undefined,
   });
   if (error) return { error: error.message };
+  if (decision === "pass") {
+    // Gate runs on the reviewed creative before DM review (S9).
+    const { data: rec } = await supabase
+      .from("content_records")
+      .select("current_creative_version_id")
+      .eq("id", contentId)
+      .maybeSingle();
+    if (rec?.current_creative_version_id)
+      await autoRunCreativeCheck(rec.current_creative_version_id, code);
+  }
   revalidateAll(code);
   return { success: decision === "pass" ? "Production review passed" : "Returned to production" };
 }

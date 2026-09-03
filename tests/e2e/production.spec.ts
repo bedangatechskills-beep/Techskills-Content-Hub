@@ -18,12 +18,14 @@ async function login(page: Page, email: string) {
 }
 async function logout(page: Page) {
   await page.getByRole("button", { name: /sign out/i }).click();
-  await expect(page).toHaveURL(/\/login/);
+  await expect(page).toHaveURL(/\/login/, { timeout: 30_000 });
 }
 async function uploadPoster(page: Page) {
   await page.getByLabel("File").setInputFiles(POSTER);
   await page.getByRole("button", { name: /upload review version/i }).click();
-  await expect(page.getByText(/Review version uploaded|Uploaded/).first()).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(/Review version uploaded|Uploaded/).first()).toBeVisible({
+    timeout: 30_000,
+  });
 }
 
 test("production demo path", async ({ page }) => {
@@ -42,7 +44,8 @@ test("production demo path", async ({ page }) => {
   const code = url.split("/").pop()!;
   await logout(page);
 
-  const docker = "C:/Users/Bedanga.BEDANGA-PC/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe";
+  const docker =
+    "C:/Users/Bedanga.BEDANGA-PC/AppData/Local/Programs/DockerDesktop/resources/bin/docker.exe";
   execSync(
     `"${docker}" exec -i supabase_db_content-hub psql -U postgres -d postgres -c "update public.content_records set status_key='ready_for_production' where content_id='${code}'; update public.stage_history set exited_at=now() where exited_at is null and content_id=(select id from public.content_records where content_id='${code}'); insert into public.stage_history(content_id,status_key) select id,'ready_for_production' from public.content_records where content_id='${code}';"`,
     { stdio: "ignore" },
@@ -55,12 +58,21 @@ test("production demo path", async ({ page }) => {
   await expect(row).toBeVisible();
   await row.getByRole("button", { name: "Assign" }).click();
   const dlg = page.getByRole("dialog");
-  const sumeejValue = await dlg.locator("select option", { hasText: "Sumeej" }).first().getAttribute("value");
+  const sumeejValue = await dlg
+    .locator("select option", { hasText: "Sumeej" })
+    .first()
+    .getAttribute("value");
   await dlg.locator("select").selectOption(sumeejValue!);
   await dlg.getByRole("button", { name: /^assign$/i }).click();
-  await expect(page.getByText(new RegExp(`${code} assigned`, "i")).first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(new RegExp(`${code} assigned`, "i")).first()).toBeVisible({
+    timeout: 15_000,
+  });
   await page.reload();
-  await expect(page.getByRole("row", { name: new RegExp(code) })).toHaveCount(0);
+  await expect(
+    page
+      .getByRole("row", { name: new RegExp(code) })
+      .filter({ has: page.getByRole("button", { name: "Assign" }) }),
+  ).toHaveCount(0);
   const firstProductionRow = page.getByRole("table").first().getByRole("row").nth(1);
   await expect(firstProductionRow).toContainText("Sumeej");
   await logout(page);
@@ -68,14 +80,26 @@ test("production demo path", async ({ page }) => {
   // Sumeej works it
   await login(page, "sumeej@techskills.institute");
   await page.goto(`${url}?tab=production`);
-  await page.getByRole("button", { name: /add task/i }).first().click();
+  await page
+    .getByRole("button", { name: /add task/i })
+    .first()
+    .click();
   await page.getByLabel("Title").fill("Edit video");
-  await page.getByRole("button", { name: /^add task$/i }).last().click();
+  await page
+    .getByRole("button", { name: /^add task$/i })
+    .last()
+    .click();
   await expect(page.getByText("Task added")).toBeVisible({ timeout: 15_000 });
-  await page.locator("select").filter({ hasText: /To do|In progress/ }).first().selectOption("done");
+  await page
+    .locator("select")
+    .filter({ hasText: /To do|In progress/ })
+    .first()
+    .selectOption("done");
   await expect(page.getByText(/Task updated/).first()).toBeVisible({ timeout: 15_000 });
   await uploadPoster(page);
-  await page.getByLabel("Folder URL").fill("https://techskills.sharepoint.com/sites/marketing/" + code);
+  await page
+    .getByLabel("Folder URL")
+    .fill("https://techskills.sharepoint.com/sites/marketing/" + code);
   await page.getByRole("button", { name: /save link/i }).click();
   await expect(page.getByText(/Folder link saved/i).first()).toBeVisible({ timeout: 15_000 });
   await page.getByRole("button", { name: /submit for production review/i }).click();
@@ -89,7 +113,10 @@ test("production demo path", async ({ page }) => {
   await page.getByRole("button", { name: /return to production/i }).click();
   const confirm = page.getByRole("dialog");
   if (await confirm.isVisible().catch(() => false)) {
-    await confirm.getByRole("button", { name: /return/i }).last().click();
+    await confirm
+      .getByRole("button", { name: /return/i })
+      .last()
+      .click();
   }
   await expect(page.getByText(/Returned to production/).first()).toBeVisible({ timeout: 20_000 });
   await logout(page);

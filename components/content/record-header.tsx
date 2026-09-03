@@ -1,5 +1,14 @@
 import type { ReactNode } from "react";
-import { CalendarClock, Folder, FolderX, Languages, MapPin } from "lucide-react";
+import {
+  AlertTriangle,
+  CalendarClock,
+  Folder,
+  FolderX,
+  Languages,
+  MapPin,
+  Sparkles,
+} from "lucide-react";
+import type { GateStatus } from "@/lib/review/queries";
 import type { ContentDetail, ReferenceData } from "@/lib/content/queries";
 import { formatDate, timeAgo } from "@/lib/workflow/statuses";
 import { Badge } from "@/components/ui/badge";
@@ -12,11 +21,13 @@ export function RecordHeader({
   detail,
   refData,
   banner,
+  gate,
 }: {
   detail: ContentDetail;
   refData: ReferenceData;
   /** e.g. SCRIPT CHANGED AFTER APPROVAL */
   banner?: ReactNode;
+  gate?: GateStatus | null;
 }) {
   const { record, card, status } = detail;
   const campus = refData.campuses.find((c) => c.id === record.campus_id)?.name;
@@ -47,6 +58,26 @@ export function RecordHeader({
                 className="border-amber-500/50 text-amber-700 dark:text-amber-400"
               >
                 Potentially stalled
+              </Badge>
+            ) : null}
+            {gate && gate.open_hard_flag_count > 0 ? (
+              <Badge className="bg-red-600 text-white dark:bg-red-500">
+                <AlertTriangle className="size-3" aria-hidden /> {gate.open_hard_flag_count} open
+                flag
+                {gate.open_hard_flag_count === 1 ? "" : "s"}
+              </Badge>
+            ) : null}
+            {gate && gate.open_change_requests > 0 ? (
+              <Badge className="bg-orange-500 text-white">
+                {gate.open_change_requests} change{gate.open_change_requests === 1 ? "" : "s"} open
+              </Badge>
+            ) : null}
+            {record.requires_ai_disclosure ? (
+              <Badge
+                variant="outline"
+                className="border-amber-500/50 text-amber-700 dark:text-amber-400"
+              >
+                <Sparkles className="size-3" aria-hidden /> AI disclosure
               </Badge>
             ) : null}
             {record.nepali_verification === "pending" ? (

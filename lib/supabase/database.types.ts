@@ -67,3 +67,12 @@ export type UnassignedWorkRow = Database["public"]["Views"]["v_unassigned_work"]
 export type ActiveWorkRow = Database["public"]["Views"]["v_active_work"]["Row"];
 export type DmStatsRow = Database["public"]["Views"]["v_dm_stats"]["Row"];
 export type CeoStatsRow = Database["public"]["Views"]["v_ceo_stats"]["Row"];
+
+// Phase 4
+export type DmDecision = Enums<"dm_decision">;
+export type ChangeSource = Enums<"change_source">;
+export type ChangeCategory = Enums<"change_category">;
+export type DmReviewRow = Tables<"dm_reviews">;
+export type ChangeRequestRow = Tables<"change_requests">;
+export type DmReviewQueueRow = Database["public"]["Views"]["v_dm_review_queue"]["Row"];
+export type CreativeAiLatestRow = Database["public"]["Views"]["v_creative_ai_latest"]["Row"];

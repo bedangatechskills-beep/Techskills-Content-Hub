@@ -421,3 +421,10 @@ entrypoint = "./functions/admin-users/index.ts"
 enabled = true
 verify_jwt = true
 entrypoint = "./functions/evaluate-script/index.ts"
+import_map = "./functions/deno.json"
+
+[functions.evaluate-creative]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/evaluate-creative/index.ts"
+import_map = "./functions/deno.json"

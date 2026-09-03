@@ -8,15 +8,19 @@ import { CreativesCard } from "./creatives-card";
 import { SubmitReviewButton } from "./submit-review-button";
 import { ProductionReviewCard } from "./production-review-card";
 import { ReviewHistory } from "./review-history";
+import { CreativeAiCard } from "./creative-ai-card";
+import type { ReviewsTabData } from "@/lib/review/queries";
 
 export function ProductionTab({
   detail,
   data,
   access,
+  reviews,
 }: {
   detail: ContentDetail;
   data: ProductionTabData;
   access: Access;
+  reviews: ReviewsTabData | null;
 }) {
   const { record } = detail;
   const me = access.profile.id;
@@ -62,6 +66,15 @@ export function ProductionTab({
           creatives={data.creatives}
           currentId={record.current_creative_version_id}
           canUpload={canUpload}
+        />
+        <CreativeAiCard
+          creativeVersionId={record.current_creative_version_id}
+          versionNo={data.current?.version_no ?? null}
+          code={record.content_id}
+          evaluation={reviews?.latest ?? null}
+          canRun={canUpload || canReview}
+          canResolve={canUpload || canReview}
+          canDismissSynthetic={can(access, "dm.review")}
         />
         <ReviewHistory reviews={data.reviews} checklist={data.checklist} />
       </div>

@@ -2,6 +2,9 @@
 // prompt asks of the real model, with regexes instead of judgement. It exists
 // so the gate can be exercised end to end without an API key.
 import type { AIProvider, ProviderResult } from "../provider.ts";
+import type { CreativeProviderResult } from "../provider.ts";
+import type { CreativeEvaluationInput } from "../creative-schemas.ts";
+import { mockEvaluateCreative } from "./mock-creative.ts";
 import {
   SCRIPT_CATEGORIES,
   scriptEvaluationSchema,
@@ -56,6 +59,10 @@ function wordsOf(text: string): string[] {
 export class MockProvider implements AIProvider {
   readonly name = "mock";
   readonly model = "mock-rules-v1";
+
+  async evaluateCreative(input: CreativeEvaluationInput): Promise<CreativeProviderResult> {
+    return mockEvaluateCreative(input, this.model);
+  }
 
   async evaluateScript(input: ScriptEvaluationInput): Promise<ProviderResult> {
     const script = input.script;
