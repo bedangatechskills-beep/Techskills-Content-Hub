@@ -25,6 +25,8 @@ import { ActivityTab } from "@/components/content/activity-tab";
 import { getScriptTab } from "@/lib/script/queries";
 import { ScriptTab } from "@/components/content/script/script-tab";
 import { ScriptChangedBanner } from "@/components/content/script/script-banner";
+import { getProductionTab } from "@/lib/production/queries";
+import { ProductionTab } from "@/components/content/production/production-tab";
 
 export async function generateMetadata({ params }: { params: Promise<{ contentId: string }> }) {
   const { contentId } = await params;
@@ -44,7 +46,7 @@ export default async function ContentRecordPage({
   if (!detail) notFound();
 
   const active = isTabKey(tab) ? tab : "overview";
-  const [refData, comments, activity, history, script] = await Promise.all([
+  const [refData, comments, activity, history, script, production] = await Promise.all([
     getReferenceData(),
     getComments(detail.record.id),
     active === "activity" ? getActivity(detail.record.id) : Promise.resolve([]),
@@ -54,6 +56,9 @@ export default async function ContentRecordPage({
       detail.record.current_script_version_id,
       detail.record.approved_script_version_id,
     ),
+    active === "production"
+      ? getProductionTab(detail.record.id, detail.record.current_creative_version_id)
+      : Promise.resolve(null),
   ]);
 
   const banner =
@@ -84,7 +89,17 @@ export default async function ContentRecordPage({
       <RecordTabs
         code={detail.record.content_id}
         active={active}
-        counts={{ comments: comments.length, script: script.versions.length }}
+        counts={{
+          comments: comments.length,
+          script: script.versions.length,
+          ...(production
+            ? {
+                production: production.tasks.filter(
+                  (t) => t.status === "todo" || t.status === "in_progress",
+                ).length,
+              }
+            : {}),
+        }}
       />
 
       {active === "overview" ? (
@@ -102,12 +117,8 @@ export default async function ContentRecordPage({
       ) : null}
 
       {active === "script" ? <ScriptTab detail={detail} data={script} access={access} /> : null}
-      {active === "production" ? (
-        <PlaceholderTab
-          title="Production"
-          phase="Phase 3"
-          body="Production tasks, assignment by workload, creative version uploads and production review."
-        />
+      {active === "production" && production ? (
+        <ProductionTab detail={detail} data={production} access={access} />
       ) : null}
       {active === "reviews" ? (
         <PlaceholderTab

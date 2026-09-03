@@ -53,3 +53,17 @@ export type AiFlagResolutionRow = Tables<"ai_flag_resolutions">;
 export type AppSettingRow = Tables<"app_settings">;
 export type ScriptApprovalQueueRow = Database["public"]["Views"]["v_script_approval_queue"]["Row"];
 export type ScriptAiLatestRow = Database["public"]["Views"]["v_script_ai_latest"]["Row"];
+
+// Phase 3
+export type TaskStatus = Enums<"task_status">;
+export type CreativeKind = Enums<"creative_kind">;
+export type ProductionDecision = Enums<"production_decision">;
+export type ProductionTaskRow = Tables<"production_tasks">;
+export type AssignmentRow = Tables<"assignments">;
+export type CreativeVersionRow = Tables<"creative_versions">;
+export type ProductionReviewRow = Tables<"production_reviews">;
+export type WorkloadRow = Database["public"]["Views"]["v_workload"]["Row"];
+export type UnassignedWorkRow = Database["public"]["Views"]["v_unassigned_work"]["Row"];
+export type ActiveWorkRow = Database["public"]["Views"]["v_active_work"]["Row"];
+export type DmStatsRow = Database["public"]["Views"]["v_dm_stats"]["Row"];
+export type CeoStatsRow = Database["public"]["Views"]["v_ceo_stats"]["Row"];

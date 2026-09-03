@@ -4,10 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   CheckSquare,
+  Clapperboard,
   Columns3,
   FileText,
   LayoutDashboard,
   Library,
+  ListTodo,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -19,6 +21,9 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   "/board": Columns3,
   "/content": FileText,
   "/approvals/scripts": CheckSquare,
+  "/team": UsersRound,
+  "/me": ListTodo,
+  "/production": Clapperboard,
   "/admin/reference": Library,
   "/admin/users": Users,
   "/admin/teams": UsersRound,

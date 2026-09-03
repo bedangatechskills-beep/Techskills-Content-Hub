@@ -83,6 +83,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "activity_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "activity_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "activity_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "activity_log_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
@@ -102,6 +123,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_script_approval_queue"
             referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "activity_log_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -192,11 +220,46 @@ export type Database = {
             referencedColumns: ["content_id"]
           },
           {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_creative_version_fkey"
+            columns: ["creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "creative_versions"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "ai_evaluations_requested_by_fkey"
             columns: ["requested_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "ai_evaluations_script_version_id_fkey"
@@ -252,6 +315,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_flag_resolutions_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "ai_flag_resolutions_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "ai_flag_resolutions_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "ai_flag_resolutions_evaluation_id_fkey"
@@ -354,6 +438,145 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "app_settings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "app_settings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "app_settings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
+      assignments: {
+        Row: {
+          assigned_at: string
+          assigned_by: string | null
+          assignee_id: string | null
+          content_id: string
+          id: string
+          reason: string | null
+          role: Database["public"]["Enums"]["assignment_role"]
+          unassigned_at: string | null
+        }
+        Insert: {
+          assigned_at?: string
+          assigned_by?: string | null
+          assignee_id?: string | null
+          content_id: string
+          id?: string
+          reason?: string | null
+          role: Database["public"]["Enums"]["assignment_role"]
+          unassigned_at?: string | null
+        }
+        Update: {
+          assigned_at?: string
+          assigned_by?: string | null
+          assignee_id?: string | null
+          content_id?: string
+          id?: string
+          reason?: string | null
+          role?: Database["public"]["Enums"]["assignment_role"]
+          unassigned_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignments_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "assignments_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "assignments_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "assignments_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "assignments_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "assignments_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "assignments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "assignments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
         ]
       }
       brand_facts: {
@@ -382,6 +605,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "brand_facts_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "brand_facts_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "brand_facts_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -429,6 +673,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "campaigns_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "campaigns_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "campaigns_program_id_fkey"
@@ -520,6 +785,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "comments_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "comments_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "comments_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "comments_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
@@ -539,6 +825,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_script_approval_queue"
             referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "comments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -576,6 +869,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_script_approval_queue"
             referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "content_differentiators_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "content_differentiators_differentiator_id_fkey"
@@ -673,6 +973,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_script_approval_queue"
             referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "content_platforms_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "content_platforms_platform_id_fkey"
@@ -866,6 +1173,34 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "content_records_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_current_creative_fkey"
+            columns: ["current_creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "creative_versions"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "content_records_current_script_fkey"
             columns: ["current_script_version_id"]
             isOneToOne: false
@@ -885,6 +1220,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "content_records_objective_id_fkey"
@@ -908,11 +1264,53 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "content_records_production_assignee_id_fkey"
+            columns: ["production_assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_production_assignee_id_fkey"
+            columns: ["production_assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_production_assignee_id_fkey"
+            columns: ["production_assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "content_records_production_manager_id_fkey"
             columns: ["production_manager_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_production_manager_id_fkey"
+            columns: ["production_manager_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_production_manager_id_fkey"
+            columns: ["production_manager_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_production_manager_id_fkey"
+            columns: ["production_manager_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "content_records_program_id_fkey"
@@ -934,6 +1332,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "content_records_requesting_team_id_fkey"
@@ -962,6 +1381,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -994,6 +1434,114 @@ export type Database = {
           sort_order?: number
         }
         Relationships: []
+      }
+      creative_versions: {
+        Row: {
+          content_id: string
+          created_at: string
+          duration_s: number | null
+          file_name: string
+          height: number | null
+          id: string
+          kind: Database["public"]["Enums"]["creative_kind"]
+          mime: string | null
+          note: string | null
+          size_bytes: number | null
+          storage_path: string
+          uploaded_by: string | null
+          version_no: number
+          width: number | null
+        }
+        Insert: {
+          content_id: string
+          created_at?: string
+          duration_s?: number | null
+          file_name: string
+          height?: number | null
+          id?: string
+          kind?: Database["public"]["Enums"]["creative_kind"]
+          mime?: string | null
+          note?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          uploaded_by?: string | null
+          version_no: number
+          width?: number | null
+        }
+        Update: {
+          content_id?: string
+          created_at?: string
+          duration_s?: number | null
+          file_name?: string
+          height?: number | null
+          id?: string
+          kind?: Database["public"]["Enums"]["creative_kind"]
+          mime?: string | null
+          note?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          uploaded_by?: string | null
+          version_no?: number
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "creative_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creative_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creative_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "creative_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creative_versions_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "creative_versions_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "creative_versions_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "creative_versions_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+        ]
       }
       differentiators: {
         Row: {
@@ -1073,11 +1621,39 @@ export type Database = {
             referencedColumns: ["content_id"]
           },
           {
+            foreignKeyName: "notifications_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "notifications_recipient_id_fkey"
             columns: ["recipient_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -1147,6 +1723,242 @@ export type Database = {
         }
         Relationships: []
       }
+      production_reviews: {
+        Row: {
+          checklist: Json
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          decision: Database["public"]["Enums"]["production_decision"]
+          id: string
+          notes: string | null
+          reviewer_id: string
+        }
+        Insert: {
+          checklist?: Json
+          content_id: string
+          created_at?: string
+          creative_version_id?: string | null
+          decision: Database["public"]["Enums"]["production_decision"]
+          id?: string
+          notes?: string | null
+          reviewer_id: string
+        }
+        Update: {
+          checklist?: Json
+          content_id?: string
+          created_at?: string
+          creative_version_id?: string | null
+          decision?: Database["public"]["Enums"]["production_decision"]
+          id?: string
+          notes?: string | null
+          reviewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "production_reviews_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_reviews_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_reviews_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "production_reviews_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_reviews_creative_version_id_fkey"
+            columns: ["creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "creative_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "production_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "production_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
+      production_tasks: {
+        Row: {
+          assignee_id: string | null
+          category: string | null
+          completed_at: string | null
+          content_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          priority: Database["public"]["Enums"]["content_priority"]
+          sort_order: number
+          start_date: string | null
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          category?: string | null
+          completed_at?: string | null
+          content_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: Database["public"]["Enums"]["content_priority"]
+          sort_order?: number
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          category?: string | null
+          completed_at?: string | null
+          content_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: Database["public"]["Enums"]["content_priority"]
+          sort_order?: number
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "production_tasks_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_tasks_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "production_tasks_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "production_tasks_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "production_tasks_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_tasks_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_tasks_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "production_tasks_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "production_tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "production_tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           account_status: Database["public"]["Enums"]["account_status"]
@@ -1215,6 +2027,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profiles_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "profiles_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "profiles_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "profiles_primary_team_id_fkey"
@@ -1416,6 +2249,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "script_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "script_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "script_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "script_approvals_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
@@ -1435,6 +2289,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_script_approval_queue"
             referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "script_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "script_approvals_script_version_id_fkey"
@@ -1515,11 +2376,39 @@ export type Database = {
             referencedColumns: ["content_id"]
           },
           {
+            foreignKeyName: "script_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "script_versions_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "script_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "script_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "script_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
         ]
       }
@@ -1577,8 +2466,43 @@ export type Database = {
             referencedColumns: ["content_id"]
           },
           {
+            foreignKeyName: "stage_history_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "stage_history_entered_by_fkey"
             columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stage_history_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_exited_by_fkey"
+            columns: ["exited_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1587,8 +2511,22 @@ export type Database = {
             foreignKeyName: "stage_history_exited_by_fkey"
             columns: ["exited_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_exited_by_fkey"
+            columns: ["exited_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_exited_by_fkey"
+            columns: ["exited_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "stage_history_status_key_fkey"
@@ -1627,11 +2565,53 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "team_memberships_added_by_fkey"
+            columns: ["added_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "team_memberships_added_by_fkey"
+            columns: ["added_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "team_memberships_added_by_fkey"
+            columns: ["added_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "team_memberships_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_memberships_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "team_memberships_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "team_memberships_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "team_memberships_team_id_fkey"
@@ -1678,6 +2658,27 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "teams_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "teams_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "teams_supervisor_id_fkey"
+            columns: ["supervisor_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
         ]
       }
       workflow_statuses: {
@@ -1709,6 +2710,80 @@ export type Database = {
       }
     }
     Views: {
+      v_active_work: {
+        Row: {
+          colour_key: string | null
+          content_code: string | null
+          content_id: string | null
+          due_date: string | null
+          is_overdue: boolean | null
+          is_stalled: boolean | null
+          kind: string | null
+          priority: Database["public"]["Enums"]["content_priority"] | null
+          profile_id: string | null
+          seconds_in_stage: number | null
+          stage_entered_at: string | null
+          status_key: string | null
+          status_name: string | null
+          task_id: string | null
+          title: string | null
+        }
+        Relationships: []
+      }
+      v_ceo_stats: {
+        Row: {
+          active_approval_work: number | null
+          change_requests: number | null
+          profile_id: string | null
+          waiting_final_approval: number | null
+          waiting_script_approval: number | null
+        }
+        Insert: {
+          active_approval_work?: never
+          change_requests?: never
+          profile_id?: string | null
+          waiting_final_approval?: never
+          waiting_script_approval?: never
+        }
+        Update: {
+          active_approval_work?: never
+          change_requests?: never
+          profile_id?: string | null
+          waiting_final_approval?: never
+          waiting_script_approval?: never
+        }
+        Relationships: []
+      }
+      v_dm_stats: {
+        Row: {
+          active_content: number | null
+          current_tasks: number | null
+          dm_reviews_waiting: number | null
+          feedback_requiring_action: number | null
+          overdue: number | null
+          profile_id: string | null
+          scripts_waiting: number | null
+        }
+        Insert: {
+          active_content?: never
+          current_tasks?: never
+          dm_reviews_waiting?: never
+          feedback_requiring_action?: never
+          overdue?: never
+          profile_id?: string | null
+          scripts_waiting?: never
+        }
+        Update: {
+          active_content?: never
+          current_tasks?: never
+          dm_reviews_waiting?: never
+          feedback_requiring_action?: never
+          overdue?: never
+          profile_id?: string | null
+          scripts_waiting?: never
+        }
+        Relationships: []
+      }
       v_kanban_cards: {
         Row: {
           ai_flag_count: number | null
@@ -1783,11 +2858,53 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "content_records_production_assignee_id_fkey"
             columns: ["production_assignee_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_production_assignee_id_fkey"
+            columns: ["production_assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_production_assignee_id_fkey"
+            columns: ["production_assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_production_assignee_id_fkey"
+            columns: ["production_assignee_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "content_records_program_id_fkey"
@@ -1842,6 +2959,13 @@ export type Database = {
             referencedRelation: "v_script_approval_queue"
             referencedColumns: ["content_id"]
           },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
         ]
       }
       v_script_approval_queue: {
@@ -1873,6 +2997,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "content_records_dm_owner_id_fkey"
+            columns: ["dm_owner_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "content_records_region_code_fkey"
@@ -1921,11 +3066,39 @@ export type Database = {
             referencedColumns: ["content_id"]
           },
           {
+            foreignKeyName: "stage_history_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "stage_history_entered_by_fkey"
             columns: ["entered_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stage_history_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_entered_by_fkey"
+            columns: ["entered_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
           },
           {
             foreignKeyName: "stage_history_exited_by_fkey"
@@ -1935,11 +3108,101 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "stage_history_exited_by_fkey"
+            columns: ["exited_by"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_exited_by_fkey"
+            columns: ["exited_by"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "stage_history_exited_by_fkey"
+            columns: ["exited_by"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
             foreignKeyName: "stage_history_status_key_fkey"
             columns: ["status_key"]
             isOneToOne: false
             referencedRelation: "workflow_statuses"
             referencedColumns: ["key"]
+          },
+        ]
+      }
+      v_unassigned_work: {
+        Row: {
+          colour_key: string | null
+          content_id: string | null
+          content_type: string | null
+          dm_owner_name: string | null
+          due_date: string | null
+          id: string | null
+          is_overdue: boolean | null
+          priority: Database["public"]["Enums"]["content_priority"] | null
+          region_code: string | null
+          seconds_in_stage: number | null
+          stage_entered_at: string | null
+          status_key: string | null
+          status_name: string | null
+          title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_records_region_code_fkey"
+            columns: ["region_code"]
+            isOneToOne: false
+            referencedRelation: "regions"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "content_records_status_key_fkey"
+            columns: ["status_key"]
+            isOneToOne: false
+            referencedRelation: "workflow_statuses"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      v_workload: {
+        Row: {
+          active_count: number | null
+          current_colour_key: string | null
+          current_content_code: string | null
+          current_due_date: string | null
+          current_seconds_in_stage: number | null
+          current_status_name: string | null
+          current_title: string | null
+          full_name: string | null
+          in_ceo: boolean | null
+          in_content_reviewer: boolean | null
+          in_dm: boolean | null
+          in_production: boolean | null
+          last_active_at: string | null
+          overdue_count: number | null
+          photo_url: string | null
+          profile_id: string | null
+          role_id: string | null
+          role_key: string | null
+          role_name: string | null
+          stalled_count: number | null
+          work_status: Database["public"]["Enums"]["work_status"] | null
+          workload_status: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2225,6 +3488,61 @@ export type Database = {
         }
       }
       assert_admin: { Args: never; Returns: undefined }
+      assign_production: {
+        Args: { p_assignee_id: string; p_content_id: string; p_reason?: string }
+        Returns: {
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       auth_profile: {
         Args: never
         Returns: {
@@ -2269,6 +3587,7 @@ export type Database = {
         Args: { p_version_id: string }
         Returns: boolean
       }
+      can_upload_creative: { Args: { p_content_id: string }; Returns: boolean }
       create_content_record: {
         Args: { p: Json }
         Returns: {
@@ -2346,6 +3665,41 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "script_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_task: {
+        Args: {
+          p_assignee_id?: string
+          p_category?: string
+          p_content_id: string
+          p_description?: string
+          p_due_date?: string
+          p_priority?: Database["public"]["Enums"]["content_priority"]
+          p_start_date?: string
+          p_title: string
+        }
+        Returns: {
+          assignee_id: string | null
+          category: string | null
+          completed_at: string | null
+          content_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          priority: Database["public"]["Enums"]["content_priority"]
+          sort_order: number
+          start_date: string | null
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "production_tasks"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -2596,8 +3950,73 @@ export type Database = {
         }
         Returns: number
       }
+      person_backlog: { Args: { p_profile_id: string }; Returns: Json }
       person_can: {
         Args: { p_content_id: string; p_permission: string }
+        Returns: boolean
+      }
+      production_review: {
+        Args: {
+          p_checklist?: Json
+          p_content_id: string
+          p_decision: Database["public"]["Enums"]["production_decision"]
+          p_notes?: string
+        }
+        Returns: {
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      profile_has_permission: {
+        Args: { p_key: string; p_profile_id: string }
         Returns: boolean
       }
       profiles_with_permission: {
@@ -2659,6 +4078,42 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "ai_evaluations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      register_creative_version: {
+        Args: {
+          p_content_id: string
+          p_duration_s?: number
+          p_file_name: string
+          p_height?: number
+          p_kind?: Database["public"]["Enums"]["creative_kind"]
+          p_mime?: string
+          p_note?: string
+          p_size_bytes?: number
+          p_storage_path: string
+          p_width?: number
+        }
+        Returns: {
+          content_id: string
+          created_at: string
+          duration_s: number | null
+          file_name: string
+          height: number | null
+          id: string
+          kind: Database["public"]["Enums"]["creative_kind"]
+          mime: string | null
+          note: string | null
+          size_bytes: number | null
+          storage_path: string
+          uploaded_by: string | null
+          version_no: number
+          width: number | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "creative_versions"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -2762,9 +4217,94 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      set_work_status: {
+        Args: { p_status: Database["public"]["Enums"]["work_status"] }
+        Returns: {
+          account_status: Database["public"]["Enums"]["account_status"]
+          auth_user_id: string | null
+          can_verify_nepali: boolean
+          created_at: string
+          created_by: string | null
+          email: string
+          full_name: string
+          id: string
+          is_final_approver: boolean
+          is_super_admin: boolean
+          job_title: string | null
+          last_active_at: string | null
+          last_login_at: string | null
+          photo_url: string | null
+          primary_team_id: string | null
+          role_id: string | null
+          updated_at: string
+          work_status: Database["public"]["Enums"]["work_status"]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       setting_bool: {
         Args: { p_default?: boolean; p_key: string }
         Returns: boolean
+      }
+      stage_actor_permission: { Args: { p_status: string }; Returns: string }
+      submit_for_production_review: {
+        Args: { p_content_id: string }
+        Returns: {
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       submit_script_for_approval: {
         Args: { p_version_id: string }
@@ -2911,6 +4451,32 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      update_task: {
+        Args: { p: Json; p_task_id: string }
+        Returns: {
+          assignee_id: string | null
+          category: string | null
+          completed_at: string | null
+          content_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          priority: Database["public"]["Enums"]["content_priority"]
+          sort_order: number
+          start_date: string | null
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "production_tasks"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       verify_nepali: {
         Args: { p_content_id: string; p_note?: string }
         Returns: {
@@ -2970,6 +4536,7 @@ export type Database = {
         Args: { p_from: string; p_to: string }
         Returns: number
       }
+      workload_status: { Args: { p_active: number }; Returns: string }
     }
     Enums: {
       account_status:
@@ -2979,6 +4546,7 @@ export type Database = {
         | "archived_demo"
       ai_evaluation_type: "script" | "creative"
       approval_decision: "approved" | "changes_requested"
+      assignment_role: "production_assignee" | "dm_owner"
       comment_section:
         | "concept"
         | "script"
@@ -2995,8 +4563,10 @@ export type Database = {
         | "story"
         | "one_off"
       content_priority: "low" | "normal" | "high" | "urgent"
+      creative_kind: "image" | "video" | "carousel" | "thumbnail" | "other"
       flag_action: "resolved" | "dismissed"
       nepali_verification: "not_needed" | "pending" | "verified"
+      production_decision: "pass" | "changes"
       script_approval_status:
         | "draft"
         | "submitted"
@@ -3004,6 +4574,7 @@ export type Database = {
         | "superseded"
         | "changes_requested"
       script_shape: "spoken" | "copy_spec" | "caption" | "shot_list" | "none"
+      task_status: "todo" | "in_progress" | "done" | "cancelled"
       work_status:
         | "available"
         | "working"
@@ -3154,6 +4725,7 @@ export const Constants = {
       ],
       ai_evaluation_type: ["script", "creative"],
       approval_decision: ["approved", "changes_requested"],
+      assignment_role: ["production_assignee", "dm_owner"],
       comment_section: [
         "concept",
         "script",
@@ -3172,8 +4744,10 @@ export const Constants = {
         "one_off",
       ],
       content_priority: ["low", "normal", "high", "urgent"],
+      creative_kind: ["image", "video", "carousel", "thumbnail", "other"],
       flag_action: ["resolved", "dismissed"],
       nepali_verification: ["not_needed", "pending", "verified"],
+      production_decision: ["pass", "changes"],
       script_approval_status: [
         "draft",
         "submitted",
@@ -3182,6 +4756,7 @@ export const Constants = {
         "changes_requested",
       ],
       script_shape: ["spoken", "copy_spec", "caption", "shot_list", "none"],
+      task_status: ["todo", "in_progress", "done", "cancelled"],
       work_status: [
         "available",
         "working",

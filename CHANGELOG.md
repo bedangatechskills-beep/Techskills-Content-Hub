@@ -1,5 +1,18 @@
 # Changelog
 
+## Phase 3 — Production and Workload (2026-09-03)
+
+Nil can delegate, editors work tasks and upload review versions, Nil passes or returns production, and everyone sees who has what on the Team Board and a per-person backlog.
+
+- Migration `0004_production.sql`: `production_tasks`, `assignments`, `creative_versions` (private Storage bucket `creatives`, signed uploads, RLS by assignee/manager/DM), `production_reviews` (immutable, checklist from `app_settings`), workload thresholds; views `v_active_work`, `v_workload` (§77 counting, §78 status), `v_unassigned_work`, `v_dm_stats`, `v_ceo_stats`; `person_backlog(profile)` (five groups, next-actor derived from stage + permissions); Realtime on `content_records`, `production_tasks`, `profiles`; production transitions marked RPC-only.
+- RPCs: `assign_production` (the §80 cascade: assignment row, record, activity, notification, Ready → Production), `create_task`, `update_task` (assignee or manager), `register_creative_version` (after a signed upload; flags creative-after-approval for Phase 5), `submit_for_production_review` (needs a creative and the folder link), `production_review` (pass → DM review; changes → back with a reason), `set_work_status`.
+- Screens: Production tab (assignment with history, folder link with validation and missing warning, tasks with inline status, creative gallery with previews and downloads, submit, production review with checklist, review history), `/team` Team Board in the exact §73 order with live refresh and Assign dialog with workload hints, `/production` manager overview, `/people/[id]/backlog` and `/me` with the five groups and header counts matching the Team Board, work status selector.
+- Tests: pgTAP 34 new (156 total), Playwright demo path (assign from Unassigned → Sumeej leads the board → task done → upload → folder → submit → return with reason → re-upload → pass → backlog shows history).
+- Decisions S23–S25 recorded. Hosted: migration pushed.
+
+Not done: thumbnail/poster-frame generation (previews use signed URLs and native video), task-due-today cron notification (Phase 6 notification rules).
+
+
 ## Phase 2 — Script Gate (2026-09-02)
 
 The first real quality gate: scripts are versioned in the app, an AI evaluation scores each version and raises hard compliance flags, the approver pins a specific version, and any material change afterwards is detected and forces re-approval.
