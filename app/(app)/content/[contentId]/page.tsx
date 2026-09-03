@@ -28,6 +28,8 @@ import { getProductionTab } from "@/lib/production/queries";
 import { ProductionTab } from "@/components/content/production/production-tab";
 import { getGateStatus, getReviewsTab } from "@/lib/review/queries";
 import { ReviewsTab } from "@/components/content/reviews/reviews-tab";
+import { getFinalTab } from "@/lib/final/queries";
+import { CreativeChangedBanner } from "@/components/content/final/creative-banner";
 
 export async function generateMetadata({ params }: { params: Promise<{ contentId: string }> }) {
   const { contentId } = await params;
@@ -47,7 +49,7 @@ export default async function ContentRecordPage({
   if (!detail) notFound();
 
   const active = isTabKey(tab) ? tab : "overview";
-  const [refData, comments, activity, history, script, production, reviews, gate] =
+  const [refData, comments, activity, history, script, production, reviews, gate, final] =
     await Promise.all([
       getReferenceData(),
       getComments(detail.record.id),
@@ -65,16 +67,27 @@ export default async function ContentRecordPage({
         ? getReviewsTab(detail.record.id, detail.record.current_creative_version_id)
         : Promise.resolve(null),
       getGateStatus(detail.record.id),
+      getFinalTab(
+        detail.record.id,
+        detail.record.current_creative_version_id,
+        detail.record.approved_creative_version_id,
+      ),
     ]);
 
-  const banner =
-    script.changedAfterApproval && script.current && script.approved ? (
-      <ScriptChangedBanner
-        currentNo={script.current.version_no}
-        approvedNo={script.approved.version_no}
-        isMaterial={script.current.is_material_change}
-      />
-    ) : null;
+  const banner = (
+    <>
+      {script.changedAfterApproval && script.current && script.approved ? (
+        <ScriptChangedBanner
+          currentNo={script.current.version_no}
+          approvedNo={script.approved.version_no}
+          isMaterial={script.current.is_material_change}
+        />
+      ) : null}
+      {final.creativeChangedAfterApproval ? (
+        <CreativeChangedBanner pending={final.pendingCreativeMaterial} />
+      ) : null}
+    </>
+  );
 
   const perms = {
     canEditConcept: can(access, "content.edit_concept"),
@@ -128,7 +141,7 @@ export default async function ContentRecordPage({
         <ProductionTab detail={detail} data={production} access={access} reviews={reviews} />
       ) : null}
       {active === "reviews" && reviews ? (
-        <ReviewsTab detail={detail} data={reviews} access={access} />
+        <ReviewsTab detail={detail} data={reviews} final={final} access={access} />
       ) : null}
 
       {active === "comments" ? (

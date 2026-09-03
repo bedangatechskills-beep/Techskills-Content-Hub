@@ -1,5 +1,15 @@
 # Changelog
 
+## Phase 5 — Content Review and Final Approval (2026-09-03)
+
+The optional reviewer stage with quorum and threshold, the system-computed checklist that decides whether Biraj sees an item at all, the final approval screen with exact version pinning, permanent overrides, and re-approval on material creative change. The promise to the CEO is now real: he only sees checked work.
+
+- Migration `0007_final_approval.sql`: `reviewer_ratings` (9 categories 1–5, average, decision, comment; one per reviewer per creative version), `overrides` (permanent, scoped to a creative version), `final_approvals` (immutable, pinned script and creative versions, override reason, checklist snapshot), `content_records.approved_creative_version_id`, creative material flags; settings `reviewer_threshold` 4.0, default quorum 2, `dm_can_override_threshold`, `reviewer_categories`.
+- RPCs: `set_content_review_required` (turning it off mid-stage is a logged skip with reason), `submit_reviewer_rating` (comment mandatory for Recommend With Changes / Not Ready; quorum notification), `reviewer_summary`, `record_dm_override` (quorum / threshold / recommendation; CEO notified), `complete_content_review` (or skip with reason), `final_approval_checklist` (9 spec items + hard flags + Nepali + unclassified script change, each with a fix link; reviewer items overridable), `submit_for_final_approval` (impossible while any item fails; snapshot logged), `final_approve` (Final Approver flag + permission; override reason required when reviewer rules are unmet; pins versions), `final_request_changes` (change requests sourced from final approval), `final_reject` (archive with reason), `mark_creative_material` (material → approved pointer cleared, back to Final Approval from Final Approved/Scheduled; non-material carries the approval). Queues `v_content_review_queue`, `v_final_approval_queue`. All stage moves in this phase are RPC-only.
+- Screens: Reviews tab gains the live checklist with Submit, Content Review settings, reviewer ratings with inline form, overrides, final approvals timeline, CREATIVE CHANGED AFTER FINAL APPROVAL banner with the material prompt; `/reviews/content` reviewer queue (re-review required, waiting, rated) and rating screen; `/approvals/final` queue and the §49 CEO screen (creative, approved script, AI check, production and DM reviews, reviewer summary, overrides made, unresolved issues, checklist snapshot; Final approve / Request changes / Reject with override dialog).
+- Tests: pgTAP 47 new (230 total), Playwright demo path (Bedanga rates 3.6 → threshold fails → Siris overrides → Biraj sees it and approves → Sumeej uploads a thumbnail, marks it material → back to Biraj with the banner).
+- Decisions S29–S31 recorded. Hosted: migration pushed.
+
 ## Phase 4 — Creative Gate and DM Review (2026-09-03)
 
 The second gate. Every reviewed creative gets an AI evaluation that lists objective defects first and marketing scores second; Siris reviews with the defects already surfaced; change requests route to the right team and the loop re-runs the gate automatically.

@@ -114,7 +114,21 @@ export type Database = {
             foreignKeyName: "activity_log_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "activity_log_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "activity_log_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -216,7 +230,21 @@ export type Database = {
             foreignKeyName: "ai_evaluations_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -595,7 +623,21 @@ export type Database = {
             foreignKeyName: "assignments_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "assignments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "assignments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -880,7 +922,21 @@ export type Database = {
             foreignKeyName: "change_requests_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "change_requests_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "change_requests_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -1036,7 +1092,21 @@ export type Database = {
             foreignKeyName: "comments_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "comments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "comments_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -1087,7 +1157,21 @@ export type Database = {
             foreignKeyName: "content_differentiators_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "content_differentiators_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "content_differentiators_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -1198,7 +1282,21 @@ export type Database = {
             foreignKeyName: "content_platforms_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "content_platforms_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "content_platforms_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -1233,6 +1331,7 @@ export type Database = {
       }
       content_records: {
         Row: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -1279,6 +1378,7 @@ export type Database = {
           updated_by: string | null
         }
         Insert: {
+          approved_creative_version_id?: string | null
           approved_script_version_id?: string | null
           audience_takeaway?: string | null
           campaign_id?: string | null
@@ -1325,6 +1425,7 @@ export type Database = {
           updated_by?: string | null
         }
         Update: {
+          approved_creative_version_id?: string | null
           approved_script_version_id?: string | null
           audience_takeaway?: string | null
           campaign_id?: string | null
@@ -1371,6 +1472,20 @@ export type Database = {
           updated_by?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "content_records_approved_creative_version_id_fkey"
+            columns: ["approved_creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "creative_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_approved_creative_version_id_fkey"
+            columns: ["approved_creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["creative_version_id"]
+          },
           {
             foreignKeyName: "content_records_approved_script_fkey"
             columns: ["approved_script_version_id"]
@@ -1691,7 +1806,9 @@ export type Database = {
           file_name: string
           height: number | null
           id: string
+          is_material_change: boolean | null
           kind: Database["public"]["Enums"]["creative_kind"]
+          material_reason: string | null
           mime: string | null
           note: string | null
           size_bytes: number | null
@@ -1707,7 +1824,9 @@ export type Database = {
           file_name: string
           height?: number | null
           id?: string
+          is_material_change?: boolean | null
           kind?: Database["public"]["Enums"]["creative_kind"]
+          material_reason?: string | null
           mime?: string | null
           note?: string | null
           size_bytes?: number | null
@@ -1723,7 +1842,9 @@ export type Database = {
           file_name?: string
           height?: number | null
           id?: string
+          is_material_change?: boolean | null
           kind?: Database["public"]["Enums"]["creative_kind"]
+          material_reason?: string | null
           mime?: string | null
           note?: string | null
           size_bytes?: number | null
@@ -1744,7 +1865,21 @@ export type Database = {
             foreignKeyName: "creative_versions_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "creative_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "creative_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -1868,7 +2003,21 @@ export type Database = {
             foreignKeyName: "dm_reviews_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "dm_reviews_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "dm_reviews_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -1936,6 +2085,151 @@ export type Database = {
           },
         ]
       }
+      final_approvals: {
+        Row: {
+          approver_id: string
+          checklist_snapshot: Json
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          decision: Database["public"]["Enums"]["final_decision"]
+          id: string
+          override_reason: string | null
+          reason: string | null
+          script_version_id: string | null
+        }
+        Insert: {
+          approver_id: string
+          checklist_snapshot?: Json
+          content_id: string
+          created_at?: string
+          creative_version_id?: string | null
+          decision: Database["public"]["Enums"]["final_decision"]
+          id?: string
+          override_reason?: string | null
+          reason?: string | null
+          script_version_id?: string | null
+        }
+        Update: {
+          approver_id?: string
+          checklist_snapshot?: Json
+          content_id?: string
+          created_at?: string
+          creative_version_id?: string | null
+          decision?: Database["public"]["Enums"]["final_decision"]
+          id?: string
+          override_reason?: string | null
+          reason?: string | null
+          script_version_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "final_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "final_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "final_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "final_approvals_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "final_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "final_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "final_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "final_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "final_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "final_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "final_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "final_approvals_creative_version_id_fkey"
+            columns: ["creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "creative_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "final_approvals_creative_version_id_fkey"
+            columns: ["creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["creative_version_id"]
+          },
+          {
+            foreignKeyName: "final_approvals_script_version_id_fkey"
+            columns: ["script_version_id"]
+            isOneToOne: false
+            referencedRelation: "script_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "final_approvals_script_version_id_fkey"
+            columns: ["script_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["version_id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
@@ -1979,7 +2273,21 @@ export type Database = {
             foreignKeyName: "notifications_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "notifications_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "notifications_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -2056,6 +2364,131 @@ export type Database = {
           sort_order?: number
         }
         Relationships: []
+      }
+      overrides: {
+        Row: {
+          actor_id: string
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          id: string
+          kind: Database["public"]["Enums"]["override_kind"]
+          reason: string
+          snapshot: Json
+        }
+        Insert: {
+          actor_id: string
+          content_id: string
+          created_at?: string
+          creative_version_id?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["override_kind"]
+          reason: string
+          snapshot?: Json
+        }
+        Update: {
+          actor_id?: string
+          content_id?: string
+          created_at?: string
+          creative_version_id?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["override_kind"]
+          reason?: string
+          snapshot?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "overrides_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "overrides_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "overrides_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "overrides_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "overrides_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "overrides_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "overrides_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "overrides_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_creative_version_id_fkey"
+            columns: ["creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "creative_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "overrides_creative_version_id_fkey"
+            columns: ["creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["creative_version_id"]
+          },
+        ]
       }
       permissions: {
         Row: {
@@ -2142,7 +2575,21 @@ export type Database = {
             foreignKeyName: "production_reviews_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "production_reviews_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "production_reviews_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -2302,7 +2749,21 @@ export type Database = {
             foreignKeyName: "production_tasks_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "production_tasks_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "production_tasks_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -2552,6 +3013,134 @@ export type Database = {
         }
         Relationships: []
       }
+      reviewer_ratings: {
+        Row: {
+          average: number
+          comment: string | null
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          decision: Database["public"]["Enums"]["reviewer_decision"]
+          id: string
+          reviewer_id: string
+          scores: Json
+        }
+        Insert: {
+          average: number
+          comment?: string | null
+          content_id: string
+          created_at?: string
+          creative_version_id?: string | null
+          decision: Database["public"]["Enums"]["reviewer_decision"]
+          id?: string
+          reviewer_id: string
+          scores: Json
+        }
+        Update: {
+          average?: number
+          comment?: string | null
+          content_id?: string
+          created_at?: string
+          creative_version_id?: string | null
+          decision?: Database["public"]["Enums"]["reviewer_decision"]
+          id?: string
+          reviewer_id?: string
+          scores?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviewer_ratings_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "content_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_kanban_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_script_approval_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_unassigned_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_creative_version_id_fkey"
+            columns: ["creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "creative_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_creative_version_id_fkey"
+            columns: ["creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["creative_version_id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "v_ceo_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_stats"
+            referencedColumns: ["profile_id"]
+          },
+          {
+            foreignKeyName: "reviewer_ratings_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "v_workload"
+            referencedColumns: ["profile_id"]
+          },
+        ]
+      }
       role_permissions: {
         Row: {
           permission_id: string
@@ -2677,7 +3266,21 @@ export type Database = {
             foreignKeyName: "script_approvals_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "script_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "script_approvals_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -2769,7 +3372,21 @@ export type Database = {
             foreignKeyName: "script_versions_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "script_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "script_versions_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -2866,7 +3483,21 @@ export type Database = {
             foreignKeyName: "stage_history_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "stage_history_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "stage_history_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -3172,6 +3803,50 @@ export type Database = {
         }
         Relationships: []
       }
+      v_content_review_queue: {
+        Row: {
+          content_code: string | null
+          content_id: string | null
+          content_type: string | null
+          creative_version_no: number | null
+          current_creative_version_id: string | null
+          dm_owner_name: string | null
+          due_date: string | null
+          is_overdue: boolean | null
+          min_reviewer_responses: number | null
+          priority: Database["public"]["Enums"]["content_priority"] | null
+          rated_by_me: boolean | null
+          re_review_required: boolean | null
+          region_code: string | null
+          responses: number | null
+          seconds_in_stage: number | null
+          stage_entered_at: string | null
+          title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_records_current_creative_fkey"
+            columns: ["current_creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "creative_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_records_current_creative_fkey"
+            columns: ["current_creative_version_id"]
+            isOneToOne: false
+            referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["creative_version_id"]
+          },
+          {
+            foreignKeyName: "content_records_region_code_fkey"
+            columns: ["region_code"]
+            isOneToOne: false
+            referencedRelation: "regions"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
       v_creative_ai_latest: {
         Row: {
           content_id: string | null
@@ -3195,7 +3870,21 @@ export type Database = {
             foreignKeyName: "ai_evaluations_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -3334,6 +4023,39 @@ export type Database = {
           scripts_waiting?: never
         }
         Relationships: []
+      }
+      v_final_approval_queue: {
+        Row: {
+          assignee_name: string | null
+          content_code: string | null
+          content_id: string | null
+          content_review_required: boolean | null
+          content_type: string | null
+          creative_ai_score: number | null
+          creative_ai_verdict: string | null
+          creative_open_flags: number | null
+          dm_owner_name: string | null
+          is_overdue: boolean | null
+          is_reapproval: boolean | null
+          open_change_requests: number | null
+          override_count: number | null
+          prior_approvals: number | null
+          priority: Database["public"]["Enums"]["content_priority"] | null
+          region_code: string | null
+          seconds_in_stage: number | null
+          stage_entered_at: string | null
+          target_publish_date: string | null
+          title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_records_region_code_fkey"
+            columns: ["region_code"]
+            isOneToOne: false
+            referencedRelation: "regions"
+            referencedColumns: ["code"]
+          },
+        ]
       }
       v_kanban_cards: {
         Row: {
@@ -3504,7 +4226,21 @@ export type Database = {
             foreignKeyName: "ai_evaluations_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "ai_evaluations_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -3617,7 +4353,21 @@ export type Database = {
             foreignKeyName: "stage_history_content_id_fkey"
             columns: ["content_id"]
             isOneToOne: false
+            referencedRelation: "v_content_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "stage_history_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
             referencedRelation: "v_dm_review_queue"
+            referencedColumns: ["content_id"]
+          },
+          {
+            foreignKeyName: "stage_history_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "v_final_approval_queue"
             referencedColumns: ["content_id"]
           },
           {
@@ -4004,6 +4754,7 @@ export type Database = {
       approve_script: {
         Args: { p_version_id: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -4060,6 +4811,7 @@ export type Database = {
       assign_production: {
         Args: { p_assignee_id: string; p_content_id: string; p_reason?: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -4161,9 +4913,66 @@ export type Database = {
         Returns: boolean
       }
       can_upload_creative: { Args: { p_content_id: string }; Returns: boolean }
+      complete_content_review: {
+        Args: { p_content_id: string; p_skip_reason?: string }
+        Returns: {
+          approved_creative_version_id: string | null
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       create_content_record: {
         Args: { p: Json }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -4316,6 +5125,7 @@ export type Database = {
           p_scores?: Json
         }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -4388,13 +5198,186 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      final_approval_checklist: {
+        Args: { p_content_id: string }
+        Returns: Json
+      }
+      final_approve: {
+        Args: { p_content_id: string; p_override_reason?: string }
+        Returns: {
+          approved_creative_version_id: string | null
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       final_approvers: { Args: never; Returns: string[] }
+      final_reject: {
+        Args: { p_content_id: string; p_reason: string }
+        Returns: {
+          approved_creative_version_id: string | null
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      final_request_changes: {
+        Args: { p_content_id: string; p_items?: Json; p_reason: string }
+        Returns: {
+          approved_creative_version_id: string | null
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       gate_status: { Args: { p_content_id: string }; Returns: Json }
       has_permission: { Args: { p_key: string }; Returns: boolean }
       in_team: { Args: { p_team_key: string }; Returns: boolean }
       internal_move_stage: {
         Args: { p_content_id: string; p_reason?: string; p_to_status: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -4522,6 +5505,37 @@ export type Database = {
         }
         Returns: string
       }
+      mark_creative_material: {
+        Args: {
+          p_creative_version_id: string
+          p_is_material: boolean
+          p_reason: string
+        }
+        Returns: {
+          content_id: string
+          created_at: string
+          duration_s: number | null
+          file_name: string
+          height: number | null
+          id: string
+          is_material_change: boolean | null
+          kind: Database["public"]["Enums"]["creative_kind"]
+          material_reason: string | null
+          mime: string | null
+          note: string | null
+          size_bytes: number | null
+          storage_path: string
+          uploaded_by: string | null
+          version_no: number
+          width: number | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "creative_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number }
       mark_version_material: {
         Args: {
@@ -4552,6 +5566,7 @@ export type Database = {
       move_stage: {
         Args: { p_content_id: string; p_reason?: string; p_to_status: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -4629,6 +5644,7 @@ export type Database = {
           p_notes?: string
         }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -4778,6 +5794,25 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      record_dm_override: {
+        Args: { p_content_id: string; p_reason: string }
+        Returns: {
+          actor_id: string
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          id: string
+          kind: Database["public"]["Enums"]["override_kind"]
+          reason: string
+          snapshot: Json
+        }
+        SetofOptions: {
+          from: "*"
+          to: "overrides"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       register_creative_version: {
         Args: {
           p_content_id: string
@@ -4798,7 +5833,9 @@ export type Database = {
           file_name: string
           height: number | null
           id: string
+          is_material_change: boolean | null
           kind: Database["public"]["Enums"]["creative_kind"]
+          material_reason: string | null
           mime: string | null
           note: string | null
           size_bytes: number | null
@@ -4842,6 +5879,7 @@ export type Database = {
       request_script_changes: {
         Args: { p_reason: string; p_version_id: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -4963,9 +6001,72 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      reviewer_summary: { Args: { p_content_id: string }; Returns: Json }
       route_changes_required: {
         Args: { p_content_id: string; p_target?: string }
         Returns: {
+          approved_creative_version_id: string | null
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      set_content_review_required: {
+        Args: {
+          p_content_id: string
+          p_min_responses?: number
+          p_reason?: string
+          p_required: boolean
+        }
+        Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -5051,10 +6152,15 @@ export type Database = {
         Args: { p_default?: boolean; p_key: string }
         Returns: boolean
       }
+      setting_numeric: {
+        Args: { p_default: number; p_key: string }
+        Returns: number
+      }
       stage_actor_permission: { Args: { p_status: string }; Returns: string }
-      submit_for_production_review: {
+      submit_for_final_approval: {
         Args: { p_content_id: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -5107,9 +6213,91 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      submit_for_production_review: {
+        Args: { p_content_id: string }
+        Returns: {
+          approved_creative_version_id: string | null
+          approved_script_version_id: string | null
+          audience_takeaway: string | null
+          campaign_id: string | null
+          campus_id: string | null
+          concept: string | null
+          content_id: string
+          content_review_required: boolean
+          content_type_id: string
+          core_message: string | null
+          created_at: string
+          created_by: string | null
+          creative_direction: string | null
+          cta: string | null
+          current_creative_version_id: string | null
+          current_script_version_id: string | null
+          description: string | null
+          dm_owner_id: string | null
+          hook: string | null
+          id: string
+          min_reviewer_responses: number
+          nepali_verification: Database["public"]["Enums"]["nepali_verification"]
+          objective_id: string | null
+          pillar_id: string | null
+          priority: Database["public"]["Enums"]["content_priority"]
+          production_assignee_id: string | null
+          production_due: string | null
+          production_folder_url: string | null
+          production_manager_id: string | null
+          program_id: string | null
+          reference_notes: string | null
+          region_code: string
+          request_type: string | null
+          requester_id: string | null
+          requesting_team_id: string | null
+          requires_ai_disclosure: boolean
+          review_due: string | null
+          script_due: string | null
+          secondary_objective_id: string | null
+          status_key: string
+          target_audience: string | null
+          target_publish_date: string | null
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "content_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      submit_reviewer_rating: {
+        Args: {
+          p_comment?: string
+          p_content_id: string
+          p_decision: Database["public"]["Enums"]["reviewer_decision"]
+          p_scores: Json
+        }
+        Returns: {
+          average: number
+          comment: string | null
+          content_id: string
+          created_at: string
+          creative_version_id: string | null
+          decision: Database["public"]["Enums"]["reviewer_decision"]
+          id: string
+          reviewer_id: string
+          scores: Json
+        }
+        SetofOptions: {
+          from: "*"
+          to: "reviewer_ratings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       submit_script_for_approval: {
         Args: { p_version_id: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -5166,6 +6354,7 @@ export type Database = {
       update_content_fields: {
         Args: { p: Json; p_content_id: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -5281,6 +6470,7 @@ export type Database = {
       verify_nepali: {
         Args: { p_content_id: string; p_note?: string }
         Returns: {
+          approved_creative_version_id: string | null
           approved_script_version_id: string | null
           audience_takeaway: string | null
           campaign_id: string | null
@@ -5372,9 +6562,19 @@ export type Database = {
       content_priority: "low" | "normal" | "high" | "urgent"
       creative_kind: "image" | "video" | "carousel" | "thumbnail" | "other"
       dm_decision: "approved" | "changes_requested"
+      final_decision: "approved" | "changes_requested" | "rejected"
       flag_action: "resolved" | "dismissed"
       nepali_verification: "not_needed" | "pending" | "verified"
+      override_kind:
+        | "reviewer_quorum"
+        | "reviewer_threshold"
+        | "reviewer_recommendation"
+        | "hard_flags"
       production_decision: "pass" | "changes"
+      reviewer_decision:
+        | "recommend_approval"
+        | "recommend_with_changes"
+        | "not_ready"
       script_approval_status:
         | "draft"
         | "submitted"
@@ -5561,9 +6761,21 @@ export const Constants = {
       content_priority: ["low", "normal", "high", "urgent"],
       creative_kind: ["image", "video", "carousel", "thumbnail", "other"],
       dm_decision: ["approved", "changes_requested"],
+      final_decision: ["approved", "changes_requested", "rejected"],
       flag_action: ["resolved", "dismissed"],
       nepali_verification: ["not_needed", "pending", "verified"],
+      override_kind: [
+        "reviewer_quorum",
+        "reviewer_threshold",
+        "reviewer_recommendation",
+        "hard_flags",
+      ],
       production_decision: ["pass", "changes"],
+      reviewer_decision: [
+        "recommend_approval",
+        "recommend_with_changes",
+        "not_ready",
+      ],
       script_approval_status: [
         "draft",
         "submitted",

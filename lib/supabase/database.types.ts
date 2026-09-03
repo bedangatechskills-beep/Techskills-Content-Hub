@@ -76,3 +76,11 @@ export type DmReviewRow = Tables<"dm_reviews">;
 export type ChangeRequestRow = Tables<"change_requests">;
 export type DmReviewQueueRow = Database["public"]["Views"]["v_dm_review_queue"]["Row"];
 export type CreativeAiLatestRow = Database["public"]["Views"]["v_creative_ai_latest"]["Row"];
+
+// Phase 5
+export type ReviewerDecision = Enums<"reviewer_decision">;
+export type OverrideKind = Enums<"override_kind">;
+export type FinalDecision = Enums<"final_decision">;
+export type ReviewerRatingRow = Tables<"reviewer_ratings">;
+export type OverrideRow = Tables<"overrides">;
+export type FinalApprovalRow = Tables<"final_approvals">;

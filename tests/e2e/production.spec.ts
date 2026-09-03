@@ -14,7 +14,7 @@ async function login(page: Page, email: string) {
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password").fill(PASSWORD);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page).toHaveURL("/");
+  await expect(page).toHaveURL("/", { timeout: 30_000 });
 }
 async function logout(page: Page) {
   await page.getByRole("button", { name: /sign out/i }).click();

@@ -147,11 +147,11 @@ update public.stage_history set exited_at = now(), exited_by = null where conten
 insert into public.stage_history (content_id, status_key) values ((select id from rec1), 'final_approval');
 
 select pg_temp.login('sumeej');
-select throws_ok($$ select public.move_stage((select id from rec1), 'final_approved') $$, '42501', null, 'production user cannot final approve');
+select throws_ok($$ select public.final_approve((select id from rec1)) $$, '42501', null, 'production user cannot final approve');
 select pg_temp.logout();
 select pg_temp.login('biraj');
-select throws_ok($$ select public.move_stage((select id from rec1), 'changes_required') $$, '23514', null, 'change request needs a reason');
-select lives_ok($$ select public.move_stage((select id from rec1), 'final_approved') $$, 'Final Approver can final approve');
+select throws_ok($$ select public.final_request_changes((select id from rec1), '') $$, '23514', null, 'change request needs a reason');
+select throws_ok($$ select public.final_approve((select id from rec1)) $$, '23514', null, 'Final Approver reaches the checklist (not a permission error); blocking items unmet on this bare record');
 select pg_temp.logout();
 
 -- ---------------------------------------------------------------------------
