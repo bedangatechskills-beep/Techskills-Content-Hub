@@ -98,6 +98,7 @@ export function ScriptTab({
           />
           {current ? (
             <AiCheckCard
+              queued={data.queued}
               versionId={current.id}
               versionNo={current.version_no}
               contentCode={code}

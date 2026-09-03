@@ -42,8 +42,10 @@ export function AiCheckCard({
   evaluation,
   canRun,
   canResolve,
+  queued = false,
 }: {
   versionId: string;
+  queued?: boolean;
   versionNo: number;
   contentCode: string;
   evaluation: EvaluationWithResolutions | null;
@@ -119,7 +121,11 @@ export function AiCheckCard({
       </CardHeader>
       <CardContent className="space-y-6">
         {!evaluation ? (
-          <p className="text-muted-foreground text-sm">No AI check yet on V{versionNo}.</p>
+          <p className="text-muted-foreground text-sm">
+            {queued
+              ? "Queued for evaluation — the reviewer session picks it up within a few minutes. Refresh to see the result."
+              : `No AI check yet on V${versionNo}.`}
+          </p>
         ) : (
           <>
             <div className="flex flex-wrap items-center gap-4">

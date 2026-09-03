@@ -24,8 +24,10 @@ export function CreativeAiCard({
   canRun,
   canResolve,
   canDismissSynthetic,
+  queued = false,
 }: {
   creativeVersionId: string | null;
+  queued?: boolean;
   versionNo: number | null;
   code: string;
   evaluation: CreativeEvaluationEntry | null;
@@ -87,7 +89,11 @@ export function CreativeAiCard({
         {!creativeVersionId ? (
           <p className="text-muted-foreground text-sm">Upload a review version first.</p>
         ) : !evaluation ? (
-          <p className="text-muted-foreground text-sm">No creative check yet on V{versionNo}.</p>
+          <p className="text-muted-foreground text-sm">
+            {queued
+              ? "Queued for evaluation — the reviewer session picks it up within a few minutes. Refresh to see the result."
+              : `No creative check yet on V${versionNo}.`}
+          </p>
         ) : (
           <EvaluationPanel
             evaluation={evaluation}

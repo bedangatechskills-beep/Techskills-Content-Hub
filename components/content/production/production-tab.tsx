@@ -68,6 +68,7 @@ export function ProductionTab({
           canUpload={canUpload}
         />
         <CreativeAiCard
+          queued={reviews?.queued ?? false}
           creativeVersionId={record.current_creative_version_id}
           versionNo={data.current?.version_no ?? null}
           code={record.content_id}

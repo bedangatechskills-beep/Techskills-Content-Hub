@@ -70,3 +70,15 @@ scripts/        bootstrap-admin.ts
 ```
 
 See `CHANGELOG.md` for what each phase delivered.
+
+## AI provider modes
+
+`AI_PROVIDER` (Edge Function secret on the hosted project; `supabase/functions/.env` locally) selects the adapter:
+
+| Mode        | What happens                                                                                                                                                                                                                                                                                                                          |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mock`      | Deterministic rules, instant. Used by the automated tests.                                                                                                                                                                                                                                                                            |
+| `queue`     | The Edge Function assembles the prompt and parks it in `ai_evaluation_requests`. A worker evaluates it and stores the result: `pnpm ai:queue list` / `prepare <id> <dir>` / `complete <id> <result.json>`. Today the worker is the Claude Code session building the hub; results carry provider `queue`, model `claude-code-session`. |
+| `anthropic` | Real model via the Anthropic SDK. `supabase secrets set AI_PROVIDER=anthropic ANTHROPIC_API_KEY=sk-ant-…`                                                                                                                                                                                                                             |
+
+Before running `pnpm test:e2e` locally, set `supabase/functions/.env` back to `AI_PROVIDER=mock` and restart Supabase; the browser tests expect instant results.

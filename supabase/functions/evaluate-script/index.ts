@@ -119,6 +119,17 @@ Deno.serve(async (req) => {
     },
   };
 
+  // "queue" provider: park the assembled input for an external worker.
+  if ((Deno.env.get("AI_PROVIDER") ?? "mock").toLowerCase() === "queue") {
+    const { data: existing } = await admin.from("ai_evaluation_requests").select("id, status").eq("script_version_id", version.id).in("status", ["pending", "processing"]).maybeSingle();
+    if (existing && !body.force) return json({ queued: true, request_id: existing.id });
+    const { data: reqRow, error: qErr } = await admin.from("ai_evaluation_requests").insert({
+      kind: "script", content_id: version.content_id, script_version_id: version.id, input, requested_by: requesterId,
+    }).select("id").single();
+    if (qErr) return json({ error: qErr.message }, 500);
+    return json({ queued: true, request_id: reqRow.id });
+  }
+
   let provider;
   try {
     provider = await getProvider({

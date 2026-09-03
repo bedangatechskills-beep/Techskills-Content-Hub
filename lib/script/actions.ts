@@ -82,6 +82,7 @@ export async function runAiScriptCheck(
   const { data, error } = await supabase.functions.invoke<{
     evaluation?: AiEvaluationRow;
     reused?: boolean;
+    queued?: boolean;
     error?: string;
   }>("evaluate-script", { body: { script_version_id: versionId, force } });
   if (error) {
@@ -98,6 +99,12 @@ export async function runAiScriptCheck(
   }
   if (data?.error) return { error: data.error };
   revalidateRecord(contentCode);
+  if (data?.queued) {
+    return {
+      success:
+        "Queued for evaluation. The reviewer session picks it up within a few minutes; refresh to see the result.",
+    };
+  }
   return {
     success: data?.reused
       ? "Unchanged since the last check — showing the stored result."

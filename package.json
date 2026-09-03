@@ -22,7 +22,8 @@
     "db:push": "supabase db push",
     "functions:serve": "supabase functions serve",
     "functions:deploy": "supabase functions deploy admin-users",
-    "bootstrap:admin": "tsx scripts/bootstrap-admin.ts"
+    "bootstrap:admin": "tsx scripts/bootstrap-admin.ts",
+    "ai:queue": "tsx scripts/ai-queue.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.122.0",

@@ -84,3 +84,7 @@ export type FinalDecision = Enums<"final_decision">;
 export type ReviewerRatingRow = Tables<"reviewer_ratings">;
 export type OverrideRow = Tables<"overrides">;
 export type FinalApprovalRow = Tables<"final_approvals">;
+
+// AI queue provider
+export type AiRequestStatus = Enums<"ai_request_status">;
+export type AiEvaluationRequestRow = Tables<"ai_evaluation_requests">;

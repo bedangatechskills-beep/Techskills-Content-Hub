@@ -32,6 +32,8 @@ export interface ScriptTabData {
   settings: { require_ai_before_submit: boolean; script_reapproval_required: boolean };
   /** A version newer than the approved one exists and has not been classified. */
   pendingMaterialAnswer: boolean;
+  /** An AI check is queued for the current version (queue provider). */
+  queued: boolean;
   /** Current version differs from the approved version (any classification). */
   changedAfterApproval: boolean;
 }
@@ -100,6 +102,9 @@ export async function getScriptTab(
   const approved = approvedVersionId ? (byId.get(approvedVersionId) ?? null) : null;
   const versionNo = new Map(versionEntries.map((v) => [v.id, v.version_no]));
 
+  const { data: pendingReq } = currentVersionId
+    ? await supabase.rpc("pending_ai_request", { p_script_version_id: currentVersionId })
+    : { data: null };
   const settingsMap = new Map((settings ?? []).map((s) => [s.key, s.value]));
   const bool = (k: string, d: boolean) =>
     typeof settingsMap.get(k) === "boolean" ? (settingsMap.get(k) as boolean) : d;
@@ -124,6 +129,7 @@ export async function getScriptTab(
       require_ai_before_submit: bool("require_ai_before_submit", true),
       script_reapproval_required: bool("script_reapproval_required", true),
     },
+    queued: !!(pendingReq as { id?: string } | null)?.id,
     pendingMaterialAnswer:
       !!current && !!approved && current.id !== approved.id && current.is_material_change === null,
     changedAfterApproval: !!current && !!approved && current.id !== approved.id,

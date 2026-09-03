@@ -51,7 +51,7 @@ export async function runAiCreativeCheck(
   opts: { force?: boolean; source?: "manual" | "auto" } = {},
 ): Promise<ActionState & { evaluation?: AiEvaluationRow; reused?: boolean }> {
   await requireActiveUser();
-  const r = await invokeEdge<{ evaluation?: AiEvaluationRow; reused?: boolean }>(
+  const r = await invokeEdge<{ evaluation?: AiEvaluationRow; reused?: boolean; queued?: boolean }>(
     "evaluate-creative",
     {
       creative_version_id: creativeVersionId,
@@ -61,6 +61,12 @@ export async function runAiCreativeCheck(
   );
   if (r.error) return { error: r.error };
   revalidateRecord(code);
+  if (r.data?.queued) {
+    return {
+      success:
+        "Queued for evaluation. The reviewer session picks it up within a few minutes; refresh to see the result.",
+    };
+  }
   return {
     success: r.data?.reused
       ? "Unchanged since the last check — showing the stored result."

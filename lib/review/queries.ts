@@ -55,6 +55,8 @@ export interface ReviewsTabData {
   dmReviews: DmReviewEntry[];
   changeRequests: ChangeRequestEntry[];
   checklist: string[];
+  /** An AI creative check is queued for the current version (queue provider). */
+  queued: boolean;
 }
 
 async function nameMap(ids: (string | null | undefined)[]) {
@@ -105,6 +107,9 @@ export async function getReviewsTab(
     supabase.from("app_settings").select("value").eq("key", "dm_review_checklist").maybeSingle(),
     supabase.from("creative_versions").select("id, version_no").eq("content_id", contentId),
   ]);
+  const { data: pendingReq } = currentCreativeId
+    ? await supabase.rpc("pending_ai_request", { p_creative_version_id: currentCreativeId })
+    : { data: null };
   const evalIds = (evaluations ?? []).map((e) => e.id);
   const { data: resolutions } = evalIds.length
     ? await supabase.from("ai_flag_resolutions").select("*").in("evaluation_id", evalIds)
@@ -153,6 +158,7 @@ export async function getReviewsTab(
       assigned_team_name: c.assigned_team_id ? (teamName.get(c.assigned_team_id) ?? null) : null,
     })),
     checklist: Array.isArray(setting?.value) ? (setting!.value as string[]) : [],
+    queued: !!(pendingReq as { id?: string } | null)?.id,
   };
 }
 

@@ -158,6 +158,18 @@ Deno.serve(async (req) => {
     },
   };
 
+  // "queue" provider: park the assembled input (and the image path) for an external worker.
+  if ((Deno.env.get("AI_PROVIDER") ?? "mock").toLowerCase() === "queue") {
+    const { data: existing } = await admin.from("ai_evaluation_requests").select("id, status").eq("creative_version_id", cv.id).in("status", ["pending", "processing"]).maybeSingle();
+    if (existing && !body.force) return json({ queued: true, request_id: existing.id });
+    const { data: reqRow, error: qErr } = await admin.from("ai_evaluation_requests").insert({
+      kind: "creative", content_id: cv.content_id, creative_version_id: cv.id, input,
+      image_path: mime.startsWith("image/") ? cv.storage_path : null, requested_by: requesterId,
+    }).select("id").single();
+    if (qErr) return json({ error: qErr.message }, 500);
+    return json({ queued: true, request_id: reqRow.id });
+  }
+
   let provider;
   try {
     provider = await getProvider({
