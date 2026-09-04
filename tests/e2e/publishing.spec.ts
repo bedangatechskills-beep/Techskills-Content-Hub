@@ -71,7 +71,7 @@ test("publishing demo path", async ({ page }) => {
 
   // Keshar: queue → record → blocked until the checkbox → publish with URLs
   await login(page, "keshar@techskills.institute");
-  await expect(page.getByText("Publisher view")).toBeVisible();
+  await expect(page.getByText(/^Publisher ·/)).toBeVisible();
   await page.goto("/publishing");
   await expect(page.getByText(code).first()).toBeVisible();
   await expect(page.getByText(/Disclosure pending/).first()).toBeVisible();
@@ -99,7 +99,7 @@ test("publishing demo path", async ({ page }) => {
 
   // Biraj's dashboard shows it under Published This Month
   await login(page, "biraj@techskills.institute");
-  await expect(page.getByText("Final approver view")).toBeVisible();
+  await expect(page.getByText(/^Final approver ·/)).toBeVisible();
   const card = page.locator("a", { hasText: "Published This Month" });
   await expect(card).toBeVisible();
   const n = Number((await card.innerText()).replace(/\D/g, ""));
