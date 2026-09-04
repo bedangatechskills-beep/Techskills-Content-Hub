@@ -17,6 +17,7 @@ import { PriorityBadge } from "@/components/content/priority-badge";
 import { PersonCell } from "@/components/team/person-cell";
 import { WorkStatusChip, WorkloadBadge } from "@/components/team/workload-badge";
 import { cn } from "@/lib/utils";
+import { CreativeThumb } from "@/components/content/creative-thumb";
 
 interface CardDef {
   key: string;
@@ -270,7 +271,13 @@ function whenLabel(item: QueueItem): string {
 }
 
 /** The concrete list behind the first card: what to open now (10-second rule). */
-export function YourQueue({ queue }: { queue: DashboardData["queue"] }) {
+export function YourQueue({
+  queue,
+  thumbs,
+}: {
+  queue: DashboardData["queue"];
+  thumbs: DashboardData["thumbs"];
+}) {
   return (
     <Card>
       <CardHeader>
@@ -302,6 +309,12 @@ export function YourQueue({ queue }: { queue: DashboardData["queue"] }) {
                   href={i.href}
                   className="hover:bg-muted/50 -mx-2 flex items-center gap-3 rounded-md px-2 py-2"
                 >
+                  <CreativeThumb
+                    url={thumbs[i.code]?.signed_url}
+                    mime={thumbs[i.code]?.mime}
+                    kind={thumbs[i.code]?.kind}
+                    alt=""
+                  />
                   <div className="min-w-0 flex-1">
                     <div className="truncate font-medium">
                       <span className="text-muted-foreground mr-2 font-mono text-xs">{i.code}</span>

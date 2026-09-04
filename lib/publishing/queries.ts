@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { getCreativeThumbsForContent, type CreativeThumbData } from "@/lib/creatives/thumbs";
 import type {
   PublishConfirmationRow,
   PublishedLinkRow,
@@ -24,6 +25,8 @@ export interface PublishingTabData {
   publishers: { id: string; full_name: string }[];
   platforms: { id: string; name: string }[];
   campaigns: { id: string; name: string }[];
+  /** Approved creative when one exists, else the current one: what goes live. */
+  creative: CreativeThumbData | null;
 }
 
 /** Everything the Publishing tab shows for one record. */
@@ -71,6 +74,7 @@ export async function getPublishingTab(contentId: string): Promise<PublishingTab
   const { data: people } = personIds.length
     ? await supabase.from("profiles").select("id, full_name").in("id", personIds)
     : { data: [] as { id: string; full_name: string }[] };
+  const thumbs = await getCreativeThumbsForContent([contentId]);
   const nameOf = (id: string | null) => people?.find((p) => p.id === id)?.full_name ?? null;
   const platformName = (id: string) => platforms.data?.find((p) => p.id === id)?.name ?? "Platform";
 
@@ -90,6 +94,7 @@ export async function getPublishingTab(contentId: string): Promise<PublishingTab
     publishers: publishers ?? [],
     platforms: platforms.data ?? [],
     campaigns: campaigns.data ?? [],
+    creative: thumbs.get(contentId) ?? null,
   };
 }
 
@@ -99,6 +104,8 @@ export interface PublishingQueue {
   later: PublishingQueueRow[];
   disclosurePending: PublishingQueueRow[];
   recentlyPublished: PublishedLinkViewRow[];
+  /** Preview per content id for every row above. */
+  thumbs: Map<string, CreativeThumbData>;
 }
 
 /** Publisher queue (D3): Today · This Week · Later · Disclosure pending · Recently published. */
@@ -117,6 +124,10 @@ export async function getPublishingQueue(now = new Date()): Promise<PublishingQu
       .limit(50),
   ]);
   const rows = queue.data ?? [];
+  const thumbs = await getCreativeThumbsForContent([
+    ...rows.map((r) => r.content_id ?? ""),
+    ...(published.data ?? []).map((p) => p.content_id ?? ""),
+  ]);
   return {
     today: rows.filter((r) => (r.scheduled_date ?? "") <= today),
     thisWeek: rows.filter(
@@ -125,5 +136,6 @@ export async function getPublishingQueue(now = new Date()): Promise<PublishingQu
     later: rows.filter((r) => (r.scheduled_date ?? "") >= weekEnd),
     disclosurePending: rows.filter((r) => r.disclosure_pending),
     recentlyPublished: published.data ?? [],
+    thumbs,
   };
 }

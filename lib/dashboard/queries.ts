@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { can, isFinalApprover, type Access } from "@/lib/permissions/access";
+import { getCreativeThumbsForContent, type CreativeThumbData } from "@/lib/creatives/thumbs";
 import type {
   CalendarItemRow,
   ContentMixRow,
@@ -57,6 +58,8 @@ export interface DashboardData {
   activeTeam: WorkloadRow[];
   upcoming: CalendarItemRow[];
   mix: ContentMixRow[];
+  /** Creative preview per content code for the queue items. */
+  thumbs: Record<string, CreativeThumbData>;
 }
 
 function waiting(seconds: number | null | undefined): string {
@@ -360,9 +363,23 @@ export async function getDashboard(access: Access): Promise<DashboardData> {
     if (k === "ai_top_flags") flat.ai_top_flags = v as { key: string; count: number }[];
     else flat[k] = typeof v === "number" ? v : v == null ? null : Number(v);
   }
+  const codes = [...new Set(queue.items.map((i) => i.code).filter(Boolean))];
+  const thumbs: Record<string, CreativeThumbData> = {};
+  if (codes.length) {
+    const { data: recs } = await supabase
+      .from("content_records")
+      .select("id, content_id")
+      .in("content_id", codes);
+    const byId = await getCreativeThumbsForContent((recs ?? []).map((r) => r.id));
+    for (const r of recs ?? []) {
+      const t = byId.get(r.id);
+      if (t) thumbs[r.content_id] = t;
+    }
+  }
   return {
     variant,
     cards: flat,
+    thumbs,
     queue,
     needsAttention: attention.data ?? [],
     pipeline: pipeline.data ?? [],

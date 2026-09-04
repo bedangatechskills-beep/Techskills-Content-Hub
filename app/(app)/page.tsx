@@ -37,7 +37,7 @@ export default async function DashboardPage() {
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(320px,2fr)]">
         <div className="space-y-5">
-          <YourQueue queue={data.queue} />
+          <YourQueue queue={data.queue} thumbs={data.thumbs} />
           <NeedsAttention rows={data.needsAttention} scoped={!manager} />
           {manager ? <PipelineBar pipeline={data.pipeline} /> : null}
         </div>

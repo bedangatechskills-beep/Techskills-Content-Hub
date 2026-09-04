@@ -17,6 +17,7 @@ import {
 import { ScheduleForm } from "./schedule-form";
 import { PublishForm } from "./publish-form";
 import { ArchiveButton, UnscheduleButton } from "./publishing-actions";
+import { CreativeThumb } from "@/components/content/creative-thumb";
 
 export function PublishingTab({
   detail,
@@ -118,6 +119,28 @@ export function PublishingTab({
       </div>
 
       <div className="space-y-6">
+        {data.creative ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Creative</CardTitle>
+              <CardDescription>
+                V{data.creative.version_no} · {data.creative.file_name}
+                {status === "published" || status === "archived"
+                  ? " · this is what went live"
+                  : " · this is what will go live"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CreativeThumb
+                url={data.creative.signed_url}
+                mime={data.creative.mime}
+                kind={data.creative.kind}
+                alt={record.title}
+                size="lg"
+              />
+            </CardContent>
+          </Card>
+        ) : null}
         <Card>
           <CardHeader>
             <CardTitle>Publishing status</CardTitle>

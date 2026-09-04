@@ -15,14 +15,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PriorityBadge } from "@/components/content/priority-badge";
+import { CreativeThumb } from "@/components/content/creative-thumb";
+import type { CreativeThumbData } from "@/lib/creatives/thumbs";
 
 export const metadata = { title: "Publishing" };
 
-function QueueTable({ rows, empty }: { rows: PublishingQueueRow[]; empty: string }) {
+function QueueTable({
+  rows,
+  empty,
+  thumbs,
+}: {
+  rows: PublishingQueueRow[];
+  empty: string;
+  thumbs: Map<string, CreativeThumbData>;
+}) {
   return (
     <Table>
       <TableHeader>
         <TableRow>
+          <TableHead className="w-14">
+            <span className="sr-only">Creative</span>
+          </TableHead>
           <TableHead>When</TableHead>
           <TableHead>Content</TableHead>
           <TableHead>Platform</TableHead>
@@ -33,6 +46,14 @@ function QueueTable({ rows, empty }: { rows: PublishingQueueRow[]; empty: string
       <TableBody>
         {rows.map((r) => (
           <TableRow key={r.schedule_id}>
+            <TableCell>
+              <CreativeThumb
+                url={thumbs.get(r.content_id ?? "")?.signed_url}
+                mime={thumbs.get(r.content_id ?? "")?.mime}
+                kind={thumbs.get(r.content_id ?? "")?.kind}
+                alt={r.title ?? ""}
+              />
+            </TableCell>
             <TableCell className="whitespace-nowrap tabular-nums">
               {formatDateTime(r.scheduled_at)}
             </TableCell>
@@ -66,7 +87,7 @@ function QueueTable({ rows, empty }: { rows: PublishingQueueRow[]; empty: string
         ))}
         {rows.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={5} className="text-muted-foreground text-center">
+            <TableCell colSpan={6} className="text-muted-foreground text-center">
               {empty}
             </TableCell>
           </TableRow>
@@ -125,7 +146,7 @@ export default async function PublishingPage() {
           <CardDescription>Due today or earlier and not yet marked published.</CardDescription>
         </CardHeader>
         <CardContent className="overflow-x-auto">
-          <QueueTable rows={q.today} empty="Nothing to publish today." />
+          <QueueTable thumbs={q.thumbs} rows={q.today} empty="Nothing to publish today." />
         </CardContent>
       </Card>
 
@@ -134,7 +155,7 @@ export default async function PublishingPage() {
           <CardTitle>This week</CardTitle>
         </CardHeader>
         <CardContent className="overflow-x-auto">
-          <QueueTable rows={q.thisWeek} empty="Nothing else this week." />
+          <QueueTable thumbs={q.thumbs} rows={q.thisWeek} empty="Nothing else this week." />
         </CardContent>
       </Card>
 
@@ -144,7 +165,7 @@ export default async function PublishingPage() {
             <CardTitle>Later</CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto">
-            <QueueTable rows={q.later} empty="" />
+            <QueueTable thumbs={q.thumbs} rows={q.later} empty="" />
           </CardContent>
         </Card>
       ) : null}
@@ -158,6 +179,9 @@ export default async function PublishingPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-14">
+                  <span className="sr-only">Creative</span>
+                </TableHead>
                 <TableHead>Published</TableHead>
                 <TableHead>Content</TableHead>
                 <TableHead>Platform</TableHead>
@@ -168,6 +192,14 @@ export default async function PublishingPage() {
             <TableBody>
               {q.recentlyPublished.map((r) => (
                 <TableRow key={r.id}>
+                  <TableCell>
+                    <CreativeThumb
+                      url={q.thumbs.get(r.content_id ?? "")?.signed_url}
+                      mime={q.thumbs.get(r.content_id ?? "")?.mime}
+                      kind={q.thumbs.get(r.content_id ?? "")?.kind}
+                      alt={r.title ?? ""}
+                    />
+                  </TableCell>
                   <TableCell className="whitespace-nowrap tabular-nums">
                     {formatDateTime(r.published_at)}
                   </TableCell>
@@ -197,7 +229,7 @@ export default async function PublishingPage() {
               ))}
               {q.recentlyPublished.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-muted-foreground text-center">
+                  <TableCell colSpan={6} className="text-muted-foreground text-center">
                     Nothing published in the last 30 days.
                   </TableCell>
                 </TableRow>
